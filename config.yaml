@@ -1,0 +1,5 @@
+# API Keys Configuration
+# Google Gemini API key for image generation and text processing
+gemini_api_key: 
+
+

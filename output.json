@@ -1,0 +1,51 @@
+{
+  "player": {
+    "name": "Liu Bei",
+    "outfit": "A man of humble but noble bearing, dressed in the simple, layered robes (hanfu) of a commoner from the late Han dynasty, likely made of hemp in earthy tones. His calm and dignified expression is framed by long earlobes. When prepared for battle, he wears a functional suit of lamellar armor made of leather and iron scales over his robes and carries his signature twin swords, the Shuang Gu Jian."
+  },
+  "npc": [
+    {
+      "name": "Zhang Fei",
+      "outfit": "A powerfully built man with a fierce, panther-like face and bristling whiskers. He wears a commoner's tunic, perhaps sleeveless or with the sleeves rolled up, revealing muscular arms. His clothes are practical and coarse, suited for his work as a butcher and wine-seller. In battle, he wields a massive eighteen-foot-long serpent spear.",
+      "dialogue": [
+        [
+          "Liu Bei",
+          "Yide, what are you doing?!"
+        ],
+        [
+          "Zhang Fei",
+          "This scoundrel harms the people! Why shouldn't we beat him to death?"
+        ]
+      ]
+    },
+    {
+      "name": "Guan Yu",
+      "outfit": "An imposing warrior of immense height, with a long, flowing beard, a dignified face the color of dark jujubes, and piercing phoenix eyes. He wears the sturdy green robes of a traveling warrior, practical for a long journey but of a quality that suggests a noble character. He is never far from his formidable weapon, the Green Dragon Crescent Blade.",
+      "dialogue": [
+        [
+          "Guan Yu",
+          "Elder brother, after all your great achievements, you were made a mere County Commandant, and now you are insulted by this inspector. I see this is not a place for us to stay. It would be better to kill the inspector, abandon this petty office, and make a new plan for a greater cause."
+        ],
+        [
+          "Liu Bei",
+          "You are right, Yunchang. This place is not for us. We shall pursue a grander plan."
+        ]
+      ]
+    },
+    {
+      "name": "Inspector",
+      "outfit": "An arrogant and haughty official dressed in silk robes befitting his government rank. He wears a formal black cap (guan) to signify his authority. His attire is clean and expensive, a stark contrast to the common folk, and he carries himself with an air of smug superiority, often seen on horseback.",
+      "dialogue": [
+        [
+          "Inspector",
+          "Lord Xuande, save my life!"
+        ],
+        [
+          "Liu Bei",
+          "You prey on the people and should have been executed. For today, I will spare your life. We are leaving now!"
+        ]
+      ]
+    }
+  ],
+  "location": "Anxi County, a small administrative center in late Eastern Han Dynasty China. The architecture consists of traditional timber-frame buildings with grey-tiled, overhanging roofs. The central location is the county office (Yamen), a modest complex with a main hall for hearings and a public courtyard in front, where a sturdy wooden hitching post stands. Nearby is the official posthouse (驿馆), a slightly more refined lodging for traveling bureaucrats. The overall color palette is one of earthy browns, dusty greys, and the faded greens of the surrounding plains and willow trees. The culture is one of simmering discontent, where impoverished commoners respect benevolent leaders but are oppressed by a corrupt and arrogant imperial bureaucracy that demands bribes and respect."
+}
