@@ -21,7 +21,7 @@ class GeminiClient:
 
     def generate_json(self, story, prompt):
         response = self.client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3-pro-preview",
             contents=[prompt + "\n\nStory:\n" + story],
             config=types.GenerateContentConfig(
                 response_mime_type="application/json"
@@ -62,7 +62,10 @@ class GeminiClient:
         # Generate content using a multimodal model (like gemini-2.0-flash)
         response = self.client.models.generate_content(
             model="gemini-3-pro-preview",
-            contents=[prompt, img]
+            contents=[prompt, img],
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json"
+            )
         )
         #print(response.text)
         return response.text

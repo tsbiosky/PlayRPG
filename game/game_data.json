@@ -1,306 +1,201 @@
 [
     {
-        "opening_remarks": "Amidst the late Eastern Han Dynasty's decline, this story chronicles the formation of a legendary brotherhood and their initial ventures in a world engulfed by rebellion and corruption.",
-        "player": {
-            "name": "Liu Bei",
-            "outfit": "Dressed in humble, coarse linen or hemp tunic in muted colors (grey, brown), loosely tied with a rope belt, and straw sandals, reflecting his impoverished background as a straw mat weaver and sandal seller."
-        },
+        "opening_remarks": "In the chaotic final years of the Eastern Han Dynasty, amidst corruption and rebellion, three heroes are destined to meet and forge a legendary bond.",
         "npc": [
             {
                 "name": "Zhang Fei",
-                "outfit": "A robust and imposing figure, clad in sturdy, dark coarse woven clothing, perhaps a short-sleeved tunic in black or dark grey, and heavy boots, befitting his profession as a butcher and wine seller. His distinctive leopard's head, round eyes, and tiger's beard are prominent.",
                 "dialogue": [
                     [
                         "Zhang Fei",
-                        "A true man should serve his country, what are you sighing about!"
-                    ],
-                    [
-                        "Zhang Fei",
-                        "My surname is Zhang, given name Fei, courtesy name Yide. I have lived in Zhuo County for generations, making a living by butchering pigs and selling wine, and I enjoy befriending heroes from all over the world. Just now I saw you sighing while looking at the poster, which is why I asked."
+                        "A real man does not serve the country, what are you sighing for!"
                     ],
                     [
                         "Liu Bei",
-                        "I am a descendant of the Han imperial family, my surname is Liu, given name Bei. Now the Yellow Turbans are causing chaos, and I have the heart to kill the rebels for the country, but I regret that my strength is insufficient, hence my sigh."
+                        "I am a kinsman of the Han Imperial House, surnamed Liu, named Bei. Now the Yellow Turbans are causing chaos, I have the heart to kill thieves for the country, but hate that my strength is insufficient, hence I sigh."
                     ],
                     [
                         "Zhang Fei",
-                        "I have quite a bit of property at home. How about we recruit local volunteers and together achieve great things?"
+                        "I have quite a bit of property at home. We can recruit local brave men and plan great deeds together, how about that?"
                     ],
                     [
                         "Zhang Fei",
-                        "Behind my estate, there is a peach garden, where the flowers are in full bloom. Tomorrow, we should make offerings to Heaven and Earth in the garden, become sworn brothers, and with one heart and one mind, achieve great things together."
+                        "Behind my manor there is a peach garden, the flowers are blooming just right. Tomorrow, we should sacrifice to heaven and earth in the garden, become brothers, work together with one heart, and achieve great things together."
                     ],
                     [
                         "Liu Bei",
-                        "Good!"
+                        "Good."
                     ]
                 ],
-                "sprite": "npc_ZhangFei_0_0.png",
-                "avatar": "npc_ZhangFei_0_0_avatar.png"
+                "sprite": "npc_ZhangFei.png",
+                "avatar": "npc_ZhangFei_avatar.png"
             },
             {
                 "name": "Guan Yu",
-                "outfit": "Tall and dignified, dressed in practical, slightly worn but sturdy robes in natural earthy tones, perhaps a dark green or brown, with a long, majestic two-foot beard, phoenix eyes, and silkworm eyebrows. His appearance evokes that of a seasoned wanderer and a man of valor.",
                 "dialogue": [
                     [
-                        "Guan Yu",
-                        "Quick, bring me wine, I am waiting to go into the city to enlist."
-                    ],
-                    [
-                        "Guan Yu",
-                        "My surname is Guan, given name Yu, courtesy name Yunchang. Because I killed a local tyrant years ago, I have been drifting for five or six years. Hearing that soldiers are being recruited here, I specifically came to join."
-                    ],
-                    [
                         "Liu Bei",
-                        "Good!"
+                        "May I ask your name?"
+                    ],
+                    [
+                        "Guan Yu",
+                        "I am surnamed Guan, named Yu, style name Yunchang. Because I killed a bully back then, I have been wandering outside for five or six years. Hearing that there is military recruitment here, I specially came to join."
                     ]
                 ],
-                "sprite": "npc_GuanYu_0_1.png",
-                "avatar": "npc_GuanYu_0_1_avatar.png"
+                "sprite": "npc_GuanYu.png",
+                "avatar": "npc_GuanYu_avatar.png"
             }
         ],
-        "location": "The scene unfolds across several locations in Zhuo County, northern China, during the late Eastern Han Dynasty. Initially, it's a bustling town square or market area, characterized by modest wooden buildings, possibly with tiled or thatched roofs, and earthen pathways. The atmosphere is one of public gathering, with earthy and muted tones dominating the architecture. Later, the setting moves to a rustic village tavern, a simple establishment of wood and thatch, filled with the aroma of wine and food, reflecting local commoner culture. The final part takes place in a vibrant Peach Garden behind Zhang Fei's estate, a picturesque rural landscape filled with blooming pink and white peach blossoms, lush green foliage, symbolizing tranquility and the purity of brotherhood amidst the chaotic backdrop of war.",
+        "location": "The streets of Zhuo County are bustling yet marked by the dust and anxiety of the times. Traditional Han architecture with grey tiled roofs lines the road. ",
         "background_image": "background_scene_0.png",
         "building_coordinates": [
             {
                 "x": 0,
                 "y": 0,
-                "w": 190,
-                "h": 460
-            },
-            {
-                "x": 190,
-                "y": 0,
-                "w": 290,
-                "h": 220
-            },
-            {
-                "x": 730,
-                "y": 0,
-                "w": 410,
-                "h": 220
+                "w": 320,
+                "h": 360
             },
             {
                 "x": 960,
-                "y": 45,
-                "w": 290,
-                "h": 490
+                "y": 0,
+                "w": 300,
+                "h": 380
+            },
+            {
+                "x": 1260,
+                "y": 0,
+                "w": 840,
+                "h": 360
+            },
+            {
+                "x": 2150,
+                "y": 0,
+                "w": 410,
+                "h": 360
             },
             {
                 "x": 0,
-                "y": 620,
-                "w": 230,
-                "h": 330
+                "y": 1100,
+                "w": 250,
+                "h": 340
             },
             {
-                "x": 230,
-                "y": 710,
-                "w": 300,
-                "h": 240
+                "x": 330,
+                "y": 1040,
+                "w": 500,
+                "h": 400
             },
             {
-                "x": 760,
-                "y": 710,
-                "w": 330,
-                "h": 240
+                "x": 1550,
+                "y": 960,
+                "w": 350,
+                "h": 480
             },
             {
-                "x": 1340,
-                "y": 250,
-                "w": 590,
-                "h": 550
-            },
-            {
-                "x": 2370,
-                "y": 1020,
-                "w": 80,
-                "h": 150
+                "x": 1900,
+                "y": 1000,
+                "w": 660,
+                "h": 440
             }
-        ]
-    },
-    {
+        ],
         "player": {
             "name": "Liu Bei",
-            "outfit": "Wearing the formal Han Dynasty magistrate's robes, likely made of dark silk or fine linen, with subtle embroidery, and a matching official cap, signifying his position as Anxi County Magistrate."
-        },
+            "outfit": "Simple woven sandals and a modest Han dynasty commoner's robe, appearing dignified despite his poverty."
+        }
+    },
+    {
         "npc": [
             {
                 "name": "Zhang Fei",
-                "outfit": "Clad in practical, dark-colored military-style attire, perhaps a sturdy tunic and trousers, reflecting his role as a warrior and sworn brother to Liu Bei. His formidable presence and tiger-like beard remain characteristic.",
                 "dialogue": [
                     [
                         "Liu Bei",
-                        "I haven't taken a single thing from the people, where would I get money to give him?"
+                        "What is happening here?"
                     ],
                     [
-                        "Liu Bei",
-                        "Stop it!"
+                        "Zhang Fei",
+                        "Such a pest who harms the people! If I don't beat him to death, what's the use of keeping him!"
                     ]
                 ],
-                "sprite": "npc_ZhangFei_1_0.png",
-                "avatar": "npc_ZhangFei_1_0_avatar.png"
+                "sprite": "npc_ZhangFei.png",
+                "avatar": "npc_ZhangFei_avatar.png"
+            },
+            {
+                "name": "Du You",
+                "dialogue": [
+                    [
+                        "Du You",
+                        "Lord Xuande, save my life!"
+                    ]
+                ],
+                "sprite": "npc_DuYou.png",
+                "avatar": "npc_DuYou_avatar.png"
             },
             {
                 "name": "Guan Yu",
-                "outfit": "Wearing a dignified military-style robe, possibly in a deep green color, with his iconic long beard carefully maintained. His imposing stature and 'face like a heavy red date' (ruddy complexion) are striking, befitting his role as a valiant warrior and sworn brother.",
                 "dialogue": [
-                    [
-                        "Liu Bei",
-                        "I haven't taken a single thing from the people, where would I get money to give him?"
-                    ],
                     [
                         "Guan Yu",
-                        "Elder Brother has achieved many great merits, yet you are only a county magistrate, and now you are being insulted by this Inspector. I think this is no place to stay for long. We might as well kill the Inspector, abandon this petty official post, and seek a greater plan."
-                    ]
-                ],
-                "sprite": "npc_GuanYu_1_1.png",
-                "avatar": "npc_GuanYu_1_1_avatar.png"
-            },
-            {
-                "name": "Duyu",
-                "outfit": "Adorned in luxurious and brightly colored official robes, possibly vermilion or purple, indicative of his higher imperial rank and authority. He wears a formal cap and carries himself with an air of arrogance, reflecting his corrupt and haughty nature.",
-                "dialogue": [
-                    [
-                        "Duyu",
-                        "Lord Xuande, save my life!"
+                        "Brother has established many great merits, yet only serves as a county defender, and now is insulted by this inspector instead. I see this is not a place to stay for long. Better to kill the inspector, abandon this petty official post, and plan a grand strategy elsewhere."
                     ],
                     [
                         "Liu Bei",
-                        "You have harmed the people so much, you deserved to die. Today I will spare your life for now, and we are leaving!"
+                        "You harm the people like this, I ought to take your life. Today I temporarily spare you, we are leaving!"
                     ]
                 ],
-                "sprite": "npc_Duyu_1_2.png",
-                "avatar": "npc_Duyu_1_2_avatar.png"
+                "sprite": "npc_GuanYu.png",
+                "avatar": "npc_GuanYu_avatar.png"
             }
         ],
-        "location": "This scene is set in Anxi County, a typical county seat during the late Eastern Han Dynasty. The primary locations are the County Yamen (County Office) and the Post Station (驿馆). The County Yamen is a formal governmental building, likely constructed of wood with dark tiled roofs, possibly painted in somber official colors like dark red or black, signifying imperial authority. It features courtyards and administrative halls, conveying a sense of austere officialdom. The Post Station, a government-run inn for traveling officials, shares similar architectural characteristics, providing lodging and administrative functions. The surroundings include public areas in front of these buildings, where common people might gather, reflecting the hierarchical and often corrupt bureaucratic culture of the time.",
+        "location": "The County Station in Anxi, a place representing imperial bureaucracy. It features a courtyard with a horse-hitching post where the violent confrontation occurs. The atmosphere is tense and angry, contrasting the rigid, corrupt officialdom with the raw justice of the protagonists.",
         "background_image": "background_scene_1.png",
         "building_coordinates": [
             {
-                "x": 710,
-                "y": 15,
-                "w": 460,
-                "h": 330
+                "x": 0,
+                "y": 0,
+                "w": 640,
+                "h": 580
             },
             {
-                "x": 448,
-                "y": 115,
-                "w": 240,
-                "h": 170
+                "x": 0,
+                "y": 580,
+                "w": 220,
+                "h": 420
             },
             {
-                "x": 315,
-                "y": 160,
-                "w": 120,
-                "h": 200
+                "x": 1050,
+                "y": 0,
+                "w": 500,
+                "h": 450
             },
             {
-                "x": 1195,
-                "y": 115,
-                "w": 240,
-                "h": 170
+                "x": 1550,
+                "y": 0,
+                "w": 600,
+                "h": 500
             },
             {
-                "x": 1450,
-                "y": 160,
-                "w": 120,
-                "h": 200
+                "x": 2150,
+                "y": 0,
+                "w": 410,
+                "h": 880
             },
             {
-                "x": 315,
-                "y": 400,
-                "w": 120,
-                "h": 280
+                "x": 0,
+                "y": 1180,
+                "w": 650,
+                "h": 260
             },
             {
-                "x": 435,
-                "y": 380,
-                "w": 280,
-                "h": 280
-            },
-            {
-                "x": 1450,
-                "y": 400,
-                "w": 120,
-                "h": 280
-            },
-            {
-                "x": 1170,
-                "y": 380,
-                "w": 280,
-                "h": 280
-            },
-            {
-                "x": 780,
-                "y": 650,
-                "w": 320,
-                "h": 185
-            },
-            {
-                "x": 1970,
-                "y": 215,
-                "w": 350,
-                "h": 205
-            },
-            {
-                "x": 1810,
-                "y": 400,
-                "w": 130,
-                "h": 280
-            },
-            {
-                "x": 2350,
-                "y": 400,
-                "w": 130,
-                "h": 280
-            },
-            {
-                "x": 2030,
-                "y": 690,
-                "w": 230,
-                "h": 150
-            },
-            {
-                "x": 600,
-                "y": 815,
-                "w": 120,
-                "h": 90
-            },
-            {
-                "x": 1160,
-                "y": 815,
-                "w": 120,
-                "h": 90
-            },
-            {
-                "x": 1880,
-                "y": 775,
-                "w": 100,
-                "h": 85
+                "x": 1150,
+                "y": 1180,
+                "w": 1410,
+                "h": 260
             },
             {
                 "x": 2300,
-                "y": 780,
-                "w": 170,
-                "h": 110
-            },
-            {
-                "x": 335,
-                "y": 1350,
-                "w": 435,
-                "h": 90
-            },
-            {
-                "x": 1170,
-                "y": 1350,
-                "w": 390,
-                "h": 90
-            },
-            {
-                "x": 1920,
-                "y": 1220,
-                "w": 640,
-                "h": 220
+                "y": 950,
+                "w": 260,
+                "h": 230
             }
         ]
     }

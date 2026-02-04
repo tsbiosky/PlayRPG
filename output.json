@@ -1,111 +1,27 @@
-[
-    {
-        "opening_remarks": "Amidst the late Eastern Han Dynasty's decline, this story chronicles the formation of a legendary brotherhood and their initial ventures in a world engulfed by rebellion and corruption.",
-        "player": {
-            "name": "Liu Bei",
-            "outfit": "Dressed in humble, coarse linen or hemp tunic in muted colors (grey, brown), loosely tied with a rope belt, and straw sandals, reflecting his impoverished background as a straw mat weaver and sandal seller."
-        },
-        "npc": [
-            {
-                "name": "Zhang Fei",
-                "outfit": "A robust and imposing figure, clad in sturdy, dark coarse woven clothing, perhaps a short-sleeved tunic in black or dark grey, and heavy boots, befitting his profession as a butcher and wine seller. His distinctive leopard's head, round eyes, and tiger's beard are prominent.",
-                "dialogue": [
-                    [
-                        "Zhang Fei",
-                        "A true man should serve his country, what are you sighing about!"
-                    ],
-                    [
-                        "Zhang Fei",
-                        "My surname is Zhang, given name Fei, courtesy name Yide. I have lived in Zhuo County for generations, making a living by butchering pigs and selling wine, and I enjoy befriending heroes from all over the world. Just now I saw you sighing while looking at the poster, which is why I asked."
-                    ],
-                    [
-                        "Liu Bei",
-                        "I am a descendant of the Han imperial family, my surname is Liu, given name Bei. Now the Yellow Turbans are causing chaos, and I have the heart to kill the rebels for the country, but I regret that my strength is insufficient, hence my sigh."
-                    ],
-                    [
-                        "Zhang Fei",
-                        "I have quite a bit of property at home. How about we recruit local volunteers and together achieve great things?"
-                    ],
-                    [
-                        "Zhang Fei",
-                        "Behind my estate, there is a peach garden, where the flowers are in full bloom. Tomorrow, we should make offerings to Heaven and Earth in the garden, become sworn brothers, and with one heart and one mind, achieve great things together."
-                    ],
-                    [
-                        "Liu Bei",
-                        "Good!"
-                    ]
-                ]
-            },
-            {
-                "name": "Guan Yu",
-                "outfit": "Tall and dignified, dressed in practical, slightly worn but sturdy robes in natural earthy tones, perhaps a dark green or brown, with a long, majestic two-foot beard, phoenix eyes, and silkworm eyebrows. His appearance evokes that of a seasoned wanderer and a man of valor.",
-                "dialogue": [
-                    [
-                        "Guan Yu",
-                        "Quick, bring me wine, I am waiting to go into the city to enlist."
-                    ],
-                    [
-                        "Guan Yu",
-                        "My surname is Guan, given name Yu, courtesy name Yunchang. Because I killed a local tyrant years ago, I have been drifting for five or six years. Hearing that soldiers are being recruited here, I specifically came to join."
-                    ],
-                    [
-                        "Liu Bei",
-                        "Good!"
-                    ]
-                ]
-            }
-        ],
-        "location": "The scene unfolds across several locations in Zhuo County, northern China, during the late Eastern Han Dynasty. Initially, it's a bustling town square or market area, characterized by modest wooden buildings, possibly with tiled or thatched roofs, and earthen pathways. The atmosphere is one of public gathering, with earthy and muted tones dominating the architecture. Later, the setting moves to a rustic village tavern, a simple establishment of wood and thatch, filled with the aroma of wine and food, reflecting local commoner culture. The final part takes place in a vibrant Peach Garden behind Zhang Fei's estate, a picturesque rural landscape filled with blooming pink and white peach blossoms, lush green foliage, symbolizing tranquility and the purity of brotherhood amidst the chaotic backdrop of war."
+{
+    "player": {
+        "name": "The Protagonist",
+        "outfit": "Wasteland wanderer attire suitable for driving an old but sturdy RV."
     },
-    {
-        "player": {
-            "name": "Liu Bei",
-            "outfit": "Wearing the formal Han Dynasty magistrate's robes, likely made of dark silk or fine linen, with subtle embroidery, and a matching official cap, signifying his position as Anxi County Magistrate."
+    "npc_list": [
+        {
+            "name": "Giant Fire Bird",
+            "outfit": "A massive creature with a wingspan of hundreds of meters, covered in fiery red feathers that drop like burning rain."
         },
-        "npc": [
-            {
-                "name": "Zhang Fei",
-                "outfit": "Clad in practical, dark-colored military-style attire, perhaps a sturdy tunic and trousers, reflecting his role as a warrior and sworn brother to Liu Bei. His formidable presence and tiger-like beard remain characteristic.",
-                "dialogue": [
-                    [
-                        "Liu Bei",
-                        "I haven't taken a single thing from the people, where would I get money to give him?"
-                    ],
-                    [
-                        "Liu Bei",
-                        "Stop it!"
-                    ]
-                ]
-            },
-            {
-                "name": "Guan Yu",
-                "outfit": "Wearing a dignified military-style robe, possibly in a deep green color, with his iconic long beard carefully maintained. His imposing stature and 'face like a heavy red date' (ruddy complexion) are striking, befitting his role as a valiant warrior and sworn brother.",
-                "dialogue": [
-                    [
-                        "Liu Bei",
-                        "I haven't taken a single thing from the people, where would I get money to give him?"
-                    ],
-                    [
-                        "Guan Yu",
-                        "Elder Brother has achieved many great merits, yet you are only a county magistrate, and now you are being insulted by this Inspector. I think this is no place to stay for long. We might as well kill the Inspector, abandon this petty official post, and seek a greater plan."
-                    ]
-                ]
-            },
-            {
-                "name": "Duyu",
-                "outfit": "Adorned in luxurious and brightly colored official robes, possibly vermilion or purple, indicative of his higher imperial rank and authority. He wears a formal cap and carries himself with an air of arrogance, reflecting his corrupt and haughty nature.",
-                "dialogue": [
-                    [
-                        "Duyu",
-                        "Lord Xuande, save my life!"
-                    ],
-                    [
-                        "Liu Bei",
-                        "You have harmed the people so much, you deserved to die. Today I will spare your life for now, and we are leaving!"
-                    ]
-                ]
-            }
-        ],
-        "location": "This scene is set in Anxi County, a typical county seat during the late Eastern Han Dynasty. The primary locations are the County Yamen (County Office) and the Post Station (驿馆). The County Yamen is a formal governmental building, likely constructed of wood with dark tiled roofs, possibly painted in somber official colors like dark red or black, signifying imperial authority. It features courtyards and administrative halls, conveying a sense of austere officialdom. The Post Station, a government-run inn for traveling officials, shares similar architectural characteristics, providing lodging and administrative functions. The surroundings include public areas in front of these buildings, where common people might gather, reflecting the hierarchical and often corrupt bureaucratic culture of the time."
-    }
-]
+        {
+            "name": "Walking Corpse",
+            "outfit": "Decayed human form with stiff limbs, dragging itself through cracked walls."
+        }
+    ],
+    "scenes": [
+        {
+            "opening_remarks": "The world collapsed in a single day, torn apart by giant birds of fire and swallowed by sandstorms.",
+            "npc": [],
+            "location": "A devastated metropolis where melted skyscrapers droop like wax and steel structures stand exposed in thick smoke. The atmosphere is choked with a gray-yellow sandstorm rolling over cracked highways, overturned billboards, and abandoned vehicles, all illuminated by the hellish red glow of the sky."
+        },
+        {
+            "npc": [],
+            "location": "The interior of a dilapidated supermarket with shattered glass and toppled shelves, transitioning into the interior of the player's RV. Inside the vehicle, the walls slide away to reveal a surreal, infinite dark cubic space illuminated by dark golden light and floating, holographic blue game-like UI modules for water and defense systems."
+        }
+    ]
+}

@@ -1,0 +1,111 @@
+{
+    "player": {
+        "name": "Liu Bei",
+        "outfit": "Simple woven sandals and a modest Han dynasty commoner's robe, appearing dignified despite his poverty."
+    },
+    "npc_list": [
+        {
+            "name": "Zhang Fei",
+            "outfit": "Rough clothes suitable for a butcher, sturdy and imposing, later donning warrior's armor."
+        },
+        {
+            "name": "Guan Yu",
+            "outfit": "Travel-worn attire of a fugitive, distinct green robe, tall and majestic appearance."
+        },
+        {
+            "name": "Du You",
+            "outfit": "Official government robes indicating the rank of an inspector, carrying a horse whip."
+        }
+    ],
+    "scenes": [
+        {
+            "opening_remarks": "In the chaotic final years of the Eastern Han Dynasty, amidst corruption and rebellion, three heroes are destined to meet and forge a legendary bond.",
+            "npc": [
+                {
+                    "name": "Zhang Fei",
+                    "dialogue": [
+                        [
+                            "Zhang Fei",
+                            "A real man does not serve the country, what are you sighing for!"
+                        ],
+                        [
+                            "Liu Bei",
+                            "I am a kinsman of the Han Imperial House, surnamed Liu, named Bei. Now the Yellow Turbans are causing chaos, I have the heart to kill thieves for the country, but hate that my strength is insufficient, hence I sigh."
+                        ],
+                        [
+                            "Zhang Fei",
+                            "I have quite a bit of property at home. We can recruit local brave men and plan great deeds together, how about that?"
+                        ]
+                    ]
+                },
+                {
+                    "name": "Guan Yu",
+                    "dialogue": [
+                        [
+                            "Liu Bei",
+                            "May I ask your name?"
+                        ],
+                        [
+                            "Guan Yu",
+                            "I am surnamed Guan, named Yu, style name Yunchang. Because I killed a bully back then, I have been wandering outside for five or six years. Hearing that there is military recruitment here, I specially came to join."
+                        ]
+                    ]
+                },
+                {
+                    "name": "Zhang Fei",
+                    "dialogue": [
+                        [
+                            "Zhang Fei",
+                            "Behind my manor there is a peach garden, the flowers are blooming just right. Tomorrow, we should sacrifice to heaven and earth in the garden, become brothers, work together with one heart, and achieve great things together."
+                        ],
+                        [
+                            "Liu Bei",
+                            "Good."
+                        ]
+                    ]
+                }
+            ],
+            "location": "The streets of Zhuo County are bustling yet marked by the dust and anxiety of the times. Traditional Han architecture with grey tiled roofs lines the road. "
+        },
+        {
+            "npc": [
+                {
+                    "name": "Zhang Fei",
+                    "dialogue": [
+                        [
+                            "Liu Bei",
+                            "What is happening here?"
+                        ],
+                        [
+                            "Zhang Fei",
+                            "Such a pest who harms the people! If I don't beat him to death, what's the use of keeping him!"
+                        ]
+                    ]
+                },
+                {
+                    "name": "Du You",
+                    "dialogue": [
+                        [
+                            "Du You",
+                            "Lord Xuande, save my life!"
+                        ]
+                    ]
+                },
+                {
+                    "name": "Guan Yu",
+                    "dialogue": [
+                        [
+                            "Guan Yu",
+                            "Brother has established many great merits, yet only serves as a county defender, and now is insulted by this inspector instead. I see this is not a place to stay for long. Better to kill the inspector, abandon this petty official post, and plan a grand strategy elsewhere."
+                        ],
+                        [
+                            "Liu Bei",
+                            "You harm the people like this, I ought to take your life. Today I temporarily spare you, we are leaving!"
+                        ]
+                    ]
+                }
+            ],
+            "location": "The County Station in Anxi, a place representing imperial bureaucracy. It features a courtyard with a horse-hitching post where the violent confrontation occurs. The atmosphere is tense and angry, contrasting the rigid, corrupt officialdom with the raw justice of the protagonists."
+        }
+    ]
+}
