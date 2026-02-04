@@ -265,9 +265,9 @@ function setupUI() {
             `PLAYER PROFILE\n\nName: ${playerName}\n\nLevel: ${playerStats.level}\nHP: ${playerStats.hp} / ${playerStats.maxHp}\nAttack: ${playerStats.attack}\nDefense: ${playerStats.defense}\n\nSkill Points: ${playerStats.skillPoints}\n\nExperience: ${playerStats.experience} / 100`
         );
         const showBtns = playerStats.skillPoints > 0 && this.profileBox.visible;
-        btnHp.setPosition(boxX + 250, boxY + 160).setVisible(showBtns);
-        btnAtk.setPosition(boxX + 250, boxY + 195).setVisible(showBtns);
-        btnDef.setPosition(boxX + 250, boxY + 230).setVisible(showBtns);
+        btnHp.setPosition(boxX + 250, boxY + 220).setVisible(showBtns);
+        btnAtk.setPosition(boxX + 250, boxY + 255).setVisible(showBtns);
+        btnDef.setPosition(boxX + 250, boxY + 290).setVisible(showBtns);
     };
 
     this.toggleProfile = () => {
@@ -302,7 +302,10 @@ function setupUI() {
     };
 
     battleContainer = this.add.container(0, 0).setScrollFactor(0).setDepth(4000).setVisible(false);
-    battleContainer.add(this.add.rectangle(0, 0, 3000, 3000, 0x000000, 0.85));
+    // Localized background box instead of full screen overlay
+    this.battleBox = this.add.rectangle(0, 0, 800, 500, 0x000000, 0.85); 
+    battleContainer.add(this.battleBox);
+    
     battlePlayerSprite = this.add.sprite(-200, 50, 'player').setScale(1.5);
     battleNpcSprite = this.add.sprite(200, 50, 'npc_0_0').setScale(1.5);
     battleContainer.add([battlePlayerSprite, battleNpcSprite]);
@@ -311,17 +314,33 @@ function setupUI() {
     battleContainer.add([battleLogText, battleHpText]);
     
     // Minimal Battle Bars
+    battlePlayerBarBg = this.add.rectangle(0,0,200,20,0x333333).setOrigin(0,0.5);
     battlePlayerBarFg = this.add.rectangle(0,0,200,20,0x00ff00).setOrigin(0,0.5);
+    battleNpcBarBg = this.add.rectangle(0,0,200,20,0x333333).setOrigin(0,0.5);
     battleNpcBarFg = this.add.rectangle(0,0,200,20,0xff0000).setOrigin(0,0.5);
-    battleContainer.add([battlePlayerBarFg, battleNpcBarFg]);
+    battleContainer.add([battlePlayerBarBg, battlePlayerBarFg, battleNpcBarBg, battleNpcBarFg]);
 
     this.updateBattleLayout = () => {
         const w = this.scale.width;
         const h = this.scale.height;
-        battlePlayerSprite.setPosition(w/2 - 200, h/2 + 50);
-        battleNpcSprite.setPosition(w/2 + 200, h/2 + 50);
+        
+        if (this.battleBox) this.battleBox.setPosition(w/2, h/2);
+
+        const playerX = w/2 - 200;
+        const npcX = w/2 + 200;
+        const spriteY = h/2 + 50;
+
+        battlePlayerSprite.setPosition(playerX, spriteY);
+        battleNpcSprite.setPosition(npcX, spriteY);
         battleLogText.setPosition(w/2, h/2 + 180);
         battleHpText.setPosition(w/2, h/2 - 180);
+
+        // Position bars above sprites
+        const barY = spriteY - 120;
+        battlePlayerBarBg.setPosition(playerX - 100, barY);
+        battlePlayerBarFg.setPosition(playerX - 100, barY);
+        battleNpcBarBg.setPosition(npcX - 100, barY);
+        battleNpcBarFg.setPosition(npcX - 100, barY);
     };
     this.scale.on('resize', this.updateBattleLayout);
     this.updateBattleLayout();
@@ -502,6 +521,21 @@ function startBattle(scene) {
     battleContainer.setVisible(true); 
     scene.updateBattleLayout();
     const stats = currentTargetNpc.getData('stats');
+    
+    // Set NPC Sprite
+    const npcTexture = currentTargetNpc.texture.key;
+    battleNpcSprite.setTexture(npcTexture);
+    
+    // Reset scale first
+    battleNpcSprite.setScale(1); 
+    const targetHeight = 192; // 128 (player base) * 1.5 (player scale)
+    if (battleNpcSprite.height > 0) {
+        const scale = targetHeight / battleNpcSprite.height;
+        battleNpcSprite.setScale(scale);
+    } else {
+        battleNpcSprite.setScale(1.5);
+    }
+
     battleLogText.setText(`VS ${stats.name}`);
     updateBattleStats(stats);
     scene.time.addEvent({ delay: 1000, callback: () => executeBattleTurn(scene, stats), loop: true });
