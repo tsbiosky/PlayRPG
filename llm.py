@@ -16,7 +16,18 @@ class GeminiClient:
         
         # Using the key from the workspace if not in config
         api_key = os.getenv('GEMINI_API_KEY')
-        #print(api_key)
+        if not api_key:
+            key_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'key.txt')
+            if os.path.exists(key_file_path):
+                try:
+                    with open(key_file_path, 'r') as f:
+                        api_key = f.read().strip()
+                except Exception as e:
+                    print(f"Error reading key.txt: {e}")
+
+        if not api_key:
+            print("Warning: No Gemini API key found in environment variables or key.txt")
+            
         self.client = genai.Client(api_key=api_key)
 
     def generate_json(self, story, prompt):
