@@ -1,123 +1,92 @@
 [
     {
-        "opening_remarks": "The world collapsed in a single day, torn apart by giant birds of fire and swallowed by sandstorms.",
-        "npc": [],
-        "location": "A devastated metropolis where melted skyscrapers droop like wax and steel structures stand exposed in thick smoke. The atmosphere is choked with a gray-yellow sandstorm rolling over cracked highways, overturned billboards, and abandoned vehicles, all illuminated by the hellish red glow of the sky.",
+        "opening_remarks": "Amidst a collapsing world scorched by giant birds, a survivor discovers a mysterious technological fortress hidden within her vehicle.",
+        "npc": [
+            {
+                "name": "RV System",
+                "dialogue": [],
+                "sprite": "npc_RVSystem.png",
+                "avatar": "npc_RVSystem_avatar.png"
+            },
+            {
+                "name": "Giant Fire Bird",
+                "dialogue": [
+                    [
+                        "Giant Fire Bird",
+                        "..."
+                    ]
+                ],
+                "sprite": "npc_GiantFireBird.png",
+                "avatar": "npc_GiantFireBird_avatar.png"
+            }
+        ],
+        "location": "A devastated urban landscape characterized by skyscrapers melting like wax and exposed steel structures amidst thick smoke. The geography includes broken highways and gas stations buried under gray-yellow sandstorms. The atmosphere is apocalyptic, dominated by the fiery red glow of the sky and the desolation of a looted, shattered supermarket.",
         "background_image": "background_scene_0.png",
         "building_coordinates": [
             {
-                "x": 100,
+                "x": 0,
                 "y": 0,
-                "w": 880,
+                "w": 250,
                 "h": 580
             },
             {
-                "x": 80,
-                "y": 630,
-                "w": 860,
-                "h": 810
+                "x": 480,
+                "y": 40,
+                "w": 650,
+                "h": 550
             },
             {
-                "x": 2000,
+                "x": 1520,
                 "y": 0,
-                "w": 560,
-                "h": 500
+                "w": 260,
+                "h": 320
             },
             {
-                "x": 1750,
-                "y": 800,
-                "w": 810,
-                "h": 640
+                "x": 1980,
+                "y": 0,
+                "w": 270,
+                "h": 350
+            },
+            {
+                "x": 2320,
+                "y": 80,
+                "w": 240,
+                "h": 490
+            },
+            {
+                "x": 1550,
+                "y": 340,
+                "w": 530,
+                "h": 290
+            },
+            {
+                "x": 0,
+                "y": 920,
+                "w": 290,
+                "h": 520
+            },
+            {
+                "x": 680,
+                "y": 1140,
+                "w": 260,
+                "h": 300
+            },
+            {
+                "x": 1570,
+                "y": 1050,
+                "w": 430,
+                "h": 390
+            },
+            {
+                "x": 2280,
+                "y": 960,
+                "w": 280,
+                "h": 480
             }
         ],
         "player": {
             "name": "The Protagonist",
-            "outfit": "Wasteland wanderer attire suitable for driving an old but sturdy RV."
+            "outfit": "Unspecified in the text; she drives an old but sturdy RV."
         }
-    },
-    {
-        "npc": [],
-        "location": "The interior of a dilapidated supermarket with shattered glass and toppled shelves, transitioning into the interior of the player's RV. Inside the vehicle, the walls slide away to reveal a surreal, infinite dark cubic space illuminated by dark golden light and floating, holographic blue game-like UI modules for water and defense systems.",
-        "background_image": "background_scene_1.png",
-        "building_coordinates": [
-            {
-                "x": 25,
-                "y": 0,
-                "w": 105,
-                "h": 335
-            },
-            {
-                "x": 445,
-                "y": 0,
-                "w": 105,
-                "h": 335
-            },
-            {
-                "x": 0,
-                "y": 575,
-                "w": 160,
-                "h": 190
-            },
-            {
-                "x": 175,
-                "y": 575,
-                "w": 415,
-                "h": 190
-            },
-            {
-                "x": 0,
-                "y": 1070,
-                "w": 160,
-                "h": 190
-            },
-            {
-                "x": 340,
-                "y": 1070,
-                "w": 250,
-                "h": 190
-            },
-            {
-                "x": 795,
-                "y": 1070,
-                "w": 95,
-                "h": 370
-            },
-            {
-                "x": 980,
-                "y": 0,
-                "w": 220,
-                "h": 700
-            },
-            {
-                "x": 1200,
-                "y": 130,
-                "w": 150,
-                "h": 150
-            },
-            {
-                "x": 1390,
-                "y": 140,
-                "w": 140,
-                "h": 260
-            },
-            {
-                "x": 1360,
-                "y": 440,
-                "w": 170,
-                "h": 160
-            },
-            {
-                "x": 1360,
-                "y": 630,
-                "w": 170,
-                "h": 80
-            },
-            {
-                "x": 1570,
-                "y": 0,
-                "w": 30,
-                "h": 1440
-            }
-        ]
     }
 ]

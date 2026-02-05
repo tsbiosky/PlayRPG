@@ -279,7 +279,8 @@ function setupGame(logStep) {
         right: Phaser.Input.Keyboard.KeyCodes.D,
         space: Phaser.Input.Keyboard.KeyCodes.SPACE,
         enter: Phaser.Input.Keyboard.KeyCodes.ENTER,
-        esc: Phaser.Input.Keyboard.KeyCodes.ESC
+        esc: Phaser.Input.Keyboard.KeyCodes.ESC,
+        shift: Phaser.Input.Keyboard.KeyCodes.SHIFT
     });
     profileKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     this.input.keyboard.on('keydown-P', () => this.toggleProfile());
@@ -338,6 +339,10 @@ function setupUI() {
         btnHp.setPosition(boxX + 250, boxY + 220).setVisible(showBtns);
         btnAtk.setPosition(boxX + 250, boxY + 255).setVisible(showBtns);
         btnDef.setPosition(boxX + 250, boxY + 290).setVisible(showBtns);
+
+        if (this.shiftTip) {
+            this.shiftTip.setPosition(20, h - 40);
+        }
     };
 
     this.toggleProfile = () => {
@@ -355,6 +360,14 @@ function setupUI() {
     const profileIcon = this.add.text(20, 20, 'Status', { fontSize: '24px', fontFamily: 'Arial', fontStyle: 'bold', backgroundColor: '#000000', padding: { x: 15, y: 8 }, color: '#ffffff' })
         .setScrollFactor(0).setDepth(2000).setInteractive({ useHandCursor: true });
     profileIcon.on('pointerdown', () => this.toggleProfile());
+    
+    // Tips
+    this.shiftTip = this.add.text(20, this.scale.height - 40, 'Shift : Run', {
+        fontSize: '18px',
+        fill: '#ffffff',
+        backgroundColor: '#000000',
+        padding: { x: 10, y: 6 }
+    }).setScrollFactor(0).setDepth(2000);
 
     // Menu & Battle (Simplified for brevity)
     menuContainer = this.add.container(0, 0).setScrollFactor(0).setDepth(3000).setVisible(false);
@@ -596,7 +609,9 @@ function update() {
     }
 
     // Move
-    const speed = 200;
+    const baseSpeed = 220;
+    const runSpeed = 320;
+    const speed = keys.shift.isDown ? runSpeed : baseSpeed;
     const vx = (keys.left.isDown ? -1 : 0) + (keys.right.isDown ? 1 : 0);
     const vy = (keys.up.isDown ? -1 : 0) + (keys.down.isDown ? 1 : 0);
     const len = Math.hypot(vx, vy) || 1;

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayRPG</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Decorative background image if available */
+        #bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+            background-image: url('home_background.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        /* h1 styles removed since logo is used */
+
+        .input-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            width: 600px;
+            max-width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            font-size: 16px;
+            resize: none;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #0ed2f7;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+        }
+
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #generate-btn {
+            background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+            color: white;
+            flex: 1;
+        }
+
+        #generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+        }
+
+        #generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #sidebar {
+            width: 300px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            color: #0ed2f7;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .game-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .game-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(14, 210, 247, 0.3);
+            transform: translateX(5px);
+        }
+
+        .game-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .game-info {
+            flex: 1;
+        }
+
+        .game-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .game-date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            display: block;
+        }
+
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid #0ed2f7;
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        #log-output {
+            width: 60%;
+            height: 200px;
+            background: #111;
+            color: #0f0;
+            font-family: monospace;
+            padding: 10px;
+            overflow-y: auto;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="bg-image"></div>
+
+    <div id="main-content">
+        <img src="logo.png" alt="PlayRPG" style="max-width: 600px; margin-bottom: 20px;">
+        
+        <div class="input-container">
+            <textarea id="story-input" placeholder="Enter your story here... (e.g. 'A brave knight named Arthur seeks the Holy Grail in a dark forest...')"></textarea>
+            
+            <div class="controls">
+                <input type="text" id="project-name" placeholder="Project Name (e.g. my_adventure)">
+            </div>
+            
+            <div class="controls">
+                <!-- Using a label to style the file input -->
+                <input type="file" id="file-upload" accept=".txt" style="display: none;">
+                <button onclick="document.getElementById('file-upload').click()" style="background: rgba(255,255,255,0.1);">📂 Upload Text File</button>
+                <button id="generate-btn">✨ Generate Game</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sidebar">
+        <div class="sidebar-title">Generated Projects</div>
+        <div id="games-list">
+            <!-- Game items will be injected here -->
+            <div class="game-item">
+                <div class="game-icon">A</div>
+                <div class="game-info">
+                    <span class="game-name">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <h2 style="color: #0ed2f7;">Generating Assets...</h2>
+        <p>This may take a minute. Please wait.</p>
+        <div id="log-output"></div>
+        <button id="close-overlay-btn" style="margin-top: 20px; background: #333; display: none;">Close</button>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+</html>

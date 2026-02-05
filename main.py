@@ -258,11 +258,11 @@ def main():
         prompt = prompt_hub.avatar_prompt_template.format(name=player_name)
         # Use existing player sprite or ref image? Usually avatar uses sprite. 
         # But if we have sprite sheet, use that.
-        ref_for_avatar = [player_running_path] if os.path.exists(player_running_path) else []
+        ref_for_avatar = [player_path] if os.path.exists(player_path) else []
         
         client.generate_content(
             prompt,
-            images_path=[player_running_path if os.path.exists(player_running_path) else player_path],
+            images_path=ref_for_avatar,
             output_path=player_avatar_path,
         )
         remove_background(player_avatar_path)

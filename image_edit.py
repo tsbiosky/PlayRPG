@@ -1,24 +1,38 @@
-from PIL import Image
+from PIL import Image, ImageFilter
 
-def remove_background(image_path, output_path=None):
+def remove_background(image_path, output_path=None, white_threshold=235, low_contrast=10):
     """
-    Removes white/near-white background from an image.
+    Removes white/near-white background from an image and reduces white speckle noise.
     """
     if output_path is None:
         output_path = image_path
-        
+
     img = Image.open(image_path).convert("RGBA")
-    data = img.getdata()
-    
-    new_data = []
-    for item in data:
-        # Check if pixel is near white (adjust threshold if needed)
-        if item[0] > 240 and item[1] > 240 and item[2] > 240:
-            new_data.append((255, 255, 255, 0))
-        else:
-            new_data.append(item)
-            
-    img.putdata(new_data)
+    pixels = img.load()
+    w, h = img.size
+
+    # Build a cleaner alpha channel based on near-white detection
+    alpha = Image.new("L", (w, h), 255)
+    a_pixels = alpha.load()
+
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = pixels[x, y]
+            if a == 0:
+                a_pixels[x, y] = 0
+                continue
+            mx = max(r, g, b)
+            mn = min(r, g, b)
+            avg = (r + g + b) / 3
+            is_near_white = (r >= white_threshold and g >= white_threshold and b >= white_threshold) or (
+                avg >= white_threshold and (mx - mn) <= low_contrast
+            )
+            a_pixels[x, y] = 0 if is_near_white else 255
+
+    # Median filter removes isolated opaque dots around edges
+    alpha = alpha.filter(ImageFilter.MedianFilter(size=3))
+
+    img.putalpha(alpha)
     img.save(output_path)
     print(f"Background removed from {image_path}")
 

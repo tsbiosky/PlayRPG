@@ -74,6 +74,7 @@ Outfit: {outfit}
 Background: Pure white background (for transparency).
 Requirment:No other objects or text,no visible line between frames.
 '''
+
 player_sprite_prompt_template_up = '''
 Generate a pixel art character sprite sheet for a 2D RPG game.
 View: Full body, back view, back to screen. walking towards up 
@@ -83,6 +84,7 @@ Outfit: {outfit}
 Background: Pure white background (for transparency).
 Requirment:No other objects or text,no visible line between frames.
 '''
+
 player_sprite_prompt_template_down ='''
 Generate a pixel art character sprite sheet for a 2D RPG game.
 View: Full body, top-view. walking towards down 
