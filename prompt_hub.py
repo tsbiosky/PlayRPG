@@ -80,7 +80,7 @@ Format: stand still face to screen
 Character: {name}
 Outfit: {outfit}
 Background: Pure white background (for transparency).
-Requirment:No other objects or text
+Requirment:1.No other objects or text,  2.don't use pure white pixel in character.
 '''
 
 player_sprite_prompt_template_right ='''
@@ -90,7 +90,7 @@ Format: total 3 frames, left leg step, right leg step, passing position all towa
 Character: {name}
 Outfit: {outfit}
 Background: Pure white background (for transparency).
-Requirment:No other objects or text,no visible line between frames.
+Requirment:1.No other objects or text,  2.don't use pure white pixel in character.
 '''
 
 player_sprite_prompt_template_up = '''
@@ -100,7 +100,7 @@ Format: total 3 frames, left leg step, right leg step, passing position all towa
 Character: {name}
 Outfit: {outfit}
 Background: Pure white background (for transparency).
-Requirment:No other objects or text,no visible line between frames.
+Requirment:1.No other objects or text,  2.don't use pure white pixel in character.
 '''
 
 player_sprite_prompt_template_down ='''
@@ -110,7 +110,7 @@ Format: total 3 frames, left leg step, right leg step, passing position all towa
 Character: {name}
 Outfit: {outfit}
 Background: Pure white background (for transparency).
-Requirment:No other objects or text,no visible line between frames.
+Requirment:1.No other objects or text,  2.don't use pure white pixel in character.
 '''
 
 npc_sprite_prompt_template = '''
@@ -121,7 +121,7 @@ Style:"Semi-realistic anime," "Manhua style," "Digital oil painting," "High-fide
 Character: {name}
 Outfit: {outfit}
 Background: Pure white background (for transparency).
-No other objects or text.
+Requirment:1.No other objects or text,  2.don't use pure white pixel in character.
 '''
 
 avatar_prompt_template = '''
