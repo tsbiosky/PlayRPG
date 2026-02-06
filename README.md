@@ -29,5 +29,5 @@ python server.py
 and you will see this page
 ![Homepage](image/homepage.png)
 
-upload or enter you story in the chatbox, it will a few mins to generate the game (depend on story length),then enter the game in the right list.
+upload or enter you story in the chatbox, it will take a few mins to generate the game (depend on story length),then enter the game in the right list.
 ![Example 1](image/ex1.png)
