@@ -8,6 +8,10 @@ import prompt_hub
 from PIL import Image
 from google import genai
 from google.genai import types
+try:
+    from bgm import generate_bgm
+except Exception:
+    generate_bgm = None
 
 def main():
     parser = argparse.ArgumentParser(description='Generate RPG game assets from a story.')
@@ -36,6 +40,24 @@ def main():
             shutil.copy(os.path.join(game_dir_source, 'game.js'), os.path.join(game_dir, 'game.js'))
         if not os.path.exists(os.path.join(game_dir, 'index.html')):
             shutil.copy(os.path.join(game_dir_source, 'index.html'), os.path.join(game_dir, 'index.html'))
+
+        # Copy audio assets if they exist
+        walk_src = os.path.join(base_dir, 'walk.mp3')
+        hit_src = os.path.join(base_dir, 'hit.wav')
+        level_src = os.path.join(base_dir, 'level.mp3')
+        default_bgm_src = os.path.join(base_dir, 'default_BGM.mp3')
+        walk_dst = os.path.join(assets_dir, 'walk.mp3')
+        hit_dst = os.path.join(assets_dir, 'hit.wav')
+        level_dst = os.path.join(assets_dir, 'level.mp3')
+        default_bgm_dst = os.path.join(assets_dir, 'default_BGM.mp3')
+        if os.path.exists(walk_src) and not os.path.exists(walk_dst):
+            shutil.copy(walk_src, walk_dst)
+        if os.path.exists(hit_src) and not os.path.exists(hit_dst):
+            shutil.copy(hit_src, hit_dst)
+        if os.path.exists(level_src) and not os.path.exists(level_dst):
+            shutil.copy(level_src, level_dst)
+        if os.path.exists(default_bgm_src) and not os.path.exists(default_bgm_dst):
+            shutil.copy(default_bgm_src, default_bgm_dst)
             
         print(f"Generating game for story '{args.storyname}' in {game_dir}")
         output_json_path = os.path.join(game_dir, "output.json")
@@ -78,9 +100,29 @@ def main():
 
     # 3. Generate Assets
     
+    # BGM Generation (if prompt exists)
+    bgm_prompt = raw_data.get('bgm')
+    bgm_path = os.path.join(assets_dir, 'bgm.mp3')
+    default_bgm_src = os.path.join(base_dir, 'default_BGM.mp3')
+    if bgm_prompt and generate_bgm and not os.path.exists(bgm_path):
+        print("Generating BGM...")
+        try:
+            ok = generate_bgm("generate a bgm for rpg game ,smooth and beatiful" + bgm_prompt, bgm_path)
+            if not ok:
+                raise RuntimeError("BGM generation returned false")
+        except Exception as e:
+            print(f"Failed to generate BGM: {e}")
+            if os.path.exists(default_bgm_src):
+                shutil.copy(default_bgm_src, bgm_path)
+                print("Using default_BGM.mp3 as fallback.")
+    elif not os.path.exists(bgm_path) and os.path.exists(default_bgm_src):
+        shutil.copy(default_bgm_src, bgm_path)
+        print("Using default_BGM.mp3 (no prompt or generation skipped).")
+    
     # --- GLOBAL CHARACTERS ---
     player_data = raw_data.get('player', {})
     npc_list = raw_data.get('npc_list', [])
+    minion_list = raw_data.get('minions', [])
     scenes = raw_data.get('scenes', [])
     
     # Backward compatibility if data is just a list (old format)
@@ -111,6 +153,29 @@ def main():
                     new_npc_list.append(npc)
             scene['npc'] = new_npc_list
 
+    # Apply NPC stats from npc_list to scene NPCs
+    npc_stats_map = {}
+    for npc_def in npc_list:
+        name = npc_def.get('name')
+        if name:
+            npc_stats_map[name] = {
+                'hp': npc_def.get('hp'),
+                'attack': npc_def.get('attack'),
+                'defense': npc_def.get('defense')
+            }
+
+    for scene in scenes:
+        for npc in scene.get('npc', []):
+            name = npc.get('name')
+            if name in npc_stats_map:
+                stats = npc_stats_map[name]
+                if stats.get('hp') is not None:
+                    npc['hp'] = stats['hp']
+                if stats.get('attack') is not None:
+                    npc['attack'] = stats['attack']
+                if stats.get('defense') is not None:
+                    npc['defense'] = stats['defense']
+
     # Ensure all global NPCs appear somewhere
     if len(scenes) > 0:
         existing_npc_names = set()
@@ -125,11 +190,34 @@ def main():
             if name and name not in existing_npc_names:
                 # Pick a random scene
                 target_scene = random.choice(scenes)
-                target_scene.setdefault('npc', []).append({
+                # Inject stats if missing from dialogue prompt output but present in npc_list
+                npc_entry = {
                     "name": name,
-                    "dialogue": [[name, "..."]]
-                })
+                    "dialogue": [[name, "..."]],
+                    "hp": npc_def.get('hp', 100),
+                    "attack": npc_def.get('attack', 10),
+                    "defense": npc_def.get('defense', 10)
+                }
+                target_scene.setdefault('npc', []).append(npc_entry)
                 print(f"Adding silent NPC {name} to Scene {scenes.index(target_scene)}")
+        
+        # Inject Minions into Scenes
+        if minion_list:
+            minion_type = minion_list[0] # Assuming one type as per prompt recommendation or taking first
+            for scene in scenes:
+                # Add 3-10 minions
+                count = random.randint(3, 10)
+                scene.setdefault('minions', [])
+                for i in range(count):
+                    scene['minions'].append({
+                        "name": f"{minion_type.get('name', 'Minion')} {i+1}",
+                        "outfit": minion_type.get('outfit', 'Basic'),
+                        "hp": minion_type.get('hp', 50),
+                        "attack": minion_type.get('attack', 5),
+                        "defense": minion_type.get('defense', 0),
+                        "is_minion": True
+                    })
+    
     
     # 3a. Player Generation
     player_name = player_data.get('name', 'Hero')
@@ -268,9 +356,10 @@ def main():
         remove_background(player_avatar_path)
         crop_to_content(player_avatar_path)
 
-    # 3b. Global NPC Generation (Consistent Outfits)
+    # 3b. Global NPC & Minion Generation
     npc_assets = {} # Map name -> {sprite, avatar}
     
+    # Process NPCs
     for npc_def in npc_list:
         name = npc_def['name']
         safe_name = "".join(x for x in name if x.isalnum())
@@ -287,8 +376,6 @@ def main():
                 name=name,
                 outfit=npc_def.get('outfit', 'Standard clothes')
             )
-            # Use generate_content instead of generate_image (which doesn't exist)
-            # Pass ref_images for style consistency
             client.generate_content(prompt, images_path=ref_images, output_path=sprite_path)
             remove_background(sprite_path)
             
@@ -308,6 +395,32 @@ def main():
             'sprite': sprite_filename,
             'avatar': avatar_filename
         }
+
+    # Process Minions (Single asset for all minions of same type)
+    if minion_list:
+        m_def = minion_list[0]
+        m_name = m_def.get('name', 'Minion')
+        safe_m_name = "".join(x for x in m_name if x.isalnum())
+        m_sprite_filename = f"minion_{safe_m_name}.png"
+        m_path = os.path.join(assets_dir, m_sprite_filename)
+        
+        if not os.path.exists(m_path):
+            print(f"Generating sprite for minion {m_name}...")
+            prompt = prompt_hub.npc_sprite_prompt_template.format(
+                name=m_name,
+                outfit=m_def.get('outfit', 'Monster')
+            )
+            client.generate_content(prompt, images_path=ref_images, output_path=m_path)
+            remove_background(m_path)
+        
+        # Assign this asset to all minions in scenes
+        for scene in scenes:
+            if 'minions' in scene:
+                for m in scene['minions']:
+                    m['sprite'] = m_sprite_filename
+                    # Minions don't use avatars in chat (no chat), but battle might need one? 
+                    # Reuse sprite or simple placeholder if needed.
+
 
     # 3c. Process Scenes & Assign Assets
     for scene_index, scene in enumerate(scenes):
@@ -374,6 +487,17 @@ def main():
                 if part.inline_data:
                     image = part.as_image()
                     image.save(bg_path)
+
+        # Ensure 2560x1440 BEFORE coordinate generation
+        if os.path.exists(bg_path):
+            try:
+                bg_img = Image.open(bg_path).convert("RGBA")
+                if bg_img.size != (2560, 1440):
+                    bg_img = bg_img.resize((2560, 1440), Image.NEAREST)
+                    bg_img.save(bg_path)
+                    print(f"Resized background to 2560x1440 for Scene {scene_index}")
+            except Exception as e:
+                print(f"Failed to resize background for Scene {scene_index}: {e}")
             
         # Coordinate Generation (Always check if missing)
         if 'building_coordinates' not in scene or not scene['building_coordinates']:

@@ -25,6 +25,10 @@ class RPGRequestHandler(http.server.SimpleHTTPRequestHandler):
                 for item in os.listdir(BASE_DIR):
                     item_path = os.path.join(BASE_DIR, item)
                     if os.path.isdir(item_path):
+                        # Hidden folders or 'game' template
+                        if item == 'game' or item.startswith('.'):
+                            continue
+                        
                         if os.path.exists(os.path.join(item_path, 'index.html')):
                             # Use modification time as a sort key
                             mtime = os.path.getmtime(item_path)
@@ -58,7 +62,7 @@ class RPGRequestHandler(http.server.SimpleHTTPRequestHandler):
                 project_name = "".join(x for x in project_name if x.isalnum() or x in ('_', '-'))
                 if not project_name: project_name = "generated_game"
 
-                # Save story to file
+                # Save story
                 story_filename = f"{project_name}.txt"
                 story_path = os.path.join(BASE_DIR, story_filename)
                 with open(story_path, 'w', encoding='utf-8') as f:
@@ -66,32 +70,69 @@ class RPGRequestHandler(http.server.SimpleHTTPRequestHandler):
                 
                 print(f"Starting generation for {project_name}...")
                 
-                # Run main.py
-                cmd = [sys.executable, 'main.py', '--storyname', project_name]
+                # Send immediate headers for streaming
+                self.send_response(200)
+                self.send_header('Content-type', 'text/plain; charset=utf-8')
+                self.send_header('Transfer-Encoding', 'chunked')
+                self.send_header('X-Content-Type-Options', 'nosniff')
+                self.end_headers()
+
+                # Helper to send chunk
+                def send_chunk(text):
+                    if not text: return
+                    b = text.encode('utf-8')
+                    self.wfile.write(f"{len(b):X}\r\n".encode('utf-8'))
+                    self.wfile.write(b)
+                    self.wfile.write(b"\r\n")
+                    self.wfile.flush()
+
+                # Send initial status
+                send_chunk("Initializing generation process...\n")
                 
-                # Capture output
-                # We use a large timeout because asset generation takes time
-                result = subprocess.run(cmd, cwd=BASE_DIR, capture_output=True, text=True)
+                # Padding to force browser buffer flush (some browsers wait for 1KB)
+                send_chunk(" " * 1024 + "\n") 
+
+                cmd = [sys.executable, '-u', 'main.py', '--storyname', project_name]
                 
-                response = {
-                    'success': result.returncode == 0,
-                    'stdout': result.stdout,
-                    'stderr': result.stderr,
+                process = subprocess.Popen(
+                    cmd, 
+                    cwd=BASE_DIR, 
+                    stdout=subprocess.PIPE, 
+                    stderr=subprocess.PIPE, 
+                    text=True,
+                    encoding='utf-8',
+                    bufsize=1, 
+                    universal_newlines=True
+                )
+
+                # Stream stdout
+                for line in process.stdout:
+                    print(line, end='') # Console
+                    send_chunk(line)
+                
+                # Read stderr (after stdout closes)
+                stderr_output = process.stderr.read()
+                if stderr_output:
+                    print(stderr_output, file=sys.stderr)
+                    send_chunk(f"\nERROR LOG:\n{stderr_output}")
+
+                process.wait()
+                
+                # Send result metadata as final line
+                result_json = json.dumps({
+                    'success': process.returncode == 0,
                     'game_path': f'/{project_name}/index.html',
                     'project_name': project_name
-                }
+                })
+                send_chunk(f"\n__JSON_RESULT__{result_json}")
                 
-                self.send_response(200)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps(response).encode())
+                # End stream
+                self.wfile.write(b"0\r\n\r\n")
 
             except Exception as e:
                 print(f"Error in generation: {e}")
-                self.send_response(500)
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-                self.wfile.write(json.dumps({'success': False, 'error': str(e)}).encode())
+                # If headers not sent yet, send 500. If sent, we just break stream.
+                pass
             
             return
 
@@ -99,8 +140,8 @@ class RPGRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 def run_server():
     # Allow address reuse
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), RPGRequestHandler) as httpd:
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
+    with socketserver.ThreadingTCPServer(("", PORT), RPGRequestHandler) as httpd:
         print(f"Serving RPG Maker at http://localhost:{PORT}")
         print(f"Serving from {BASE_DIR}")
         try:

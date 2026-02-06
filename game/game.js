@@ -70,6 +70,12 @@ function preload() {
     this.load.image('player_up_img', 'assets/temp_up.png');
     this.load.image('player_right_img', 'assets/temp_right.png');
     this.load.image('player_avatar', 'assets/player_avatar.png');
+    // Audio
+    this.load.audio('walk_sfx', 'assets/walk.mp3');
+    this.load.audio('hit_sfx', 'assets/hit.wav');
+    this.load.audio('level_sfx', 'assets/level.mp3');
+    this.load.audio('bgm', 'assets/bgm.mp3');
+    this.load.audio('bgm_default', 'assets/default_BGM.mp3');
 }
 
 function create() {
@@ -120,6 +126,18 @@ function create() {
                     if (npc.sprite) this.load.image(`npc_${sIdx}_${nIdx}`, `assets/${npc.sprite}`);
                     if (npc.avatar) this.load.image(`npc_${sIdx}_${nIdx}_avatar`, `assets/${npc.avatar}`);
                     assetsToLoad = true;
+                });
+            }
+            // Load Minion Assets
+            if (scene.minions) {
+                scene.minions.forEach(m => {
+                    if (m.sprite) {
+                        const key = m.sprite.replace('.png','');
+                        if (!this.textures.exists(key)) {
+                            this.load.image(key, `assets/${m.sprite}`);
+                            assetsToLoad = true;
+                        }
+                    }
                 });
             }
         });
@@ -237,6 +255,7 @@ function setupGame(logStep) {
 
     // B. UI
     setupUI.call(this);
+    setupAudio.call(this);
 
     // C. Player
     if (this.textures.exists('player_down_sheet')) {
@@ -252,7 +271,7 @@ function setupGame(logStep) {
             this.anims.create({ key: 'walk-right', frames: this.anims.generateFrameNumbers('player_right_sheet', { frames: walkFrames }), frameRate: 8, repeat: -1 });
         }
         
-        player.setScale(192 / 128); 
+        player.setScale(288 / 128); 
         player.setCollideWorldBounds(true);
         player.setSize(40, 90).setOffset(44, 20); 
         player.setFrame(0);
@@ -380,8 +399,29 @@ function setupUI() {
     menuContainer.add([menuOption1, menuOption2]);
     menuContainer.selection = 0;
     this.updateMenuSelection = () => {
-        if (menuContainer.selection === 0) { menuOption1.setText('> Chat'); menuOption2.setText('  Fight'); } 
-        else { menuOption1.setText('  Chat'); menuOption2.setText('> Fight'); }
+        const menuOption1 = menuContainer.list[1];
+        const menuOption2 = menuContainer.list[2];
+        const npc = currentTargetNpc;
+        
+        if (!npc) return;
+        const stats = npc.getData('stats');
+        const defeated = npc.getData('data').defeated;
+
+        if (defeated) {
+             menuOption1.setText('> Chat'); 
+             menuOption2.setText('');
+             menuContainer.selection = 0;
+             return;
+        }
+
+        if (stats.isMinion) {
+            menuOption1.setText(''); 
+            menuOption2.setText('> Fight');
+            menuContainer.selection = 1; 
+        } else {
+            if (menuContainer.selection === 0) { menuOption1.setText('> Chat'); menuOption2.setText('  Fight'); } 
+            else { menuOption1.setText('  Chat'); menuOption2.setText('> Fight'); }
+        }
     };
 
     battleContainer = this.add.container(0, 0).setScrollFactor(0).setDepth(4000).setVisible(false);
@@ -446,6 +486,12 @@ function setupUI() {
     };
     this.scale.on('resize', this.dialogueUiUpdate);
     this.dialogueUiUpdate();
+
+    this.input.on('pointerdown', () => {
+        if (isPaused && currentDialogue) {
+            advanceDialogue(this);
+        }
+    });
 }
 
 function initScene(index) {
@@ -459,12 +505,15 @@ function initScene(index) {
     bgSprite.setTexture(bgKey).setDisplaySize(worldSize.width, worldSize.height);
 
     // Obstacles
+    if (obstacles) obstacles.clear(true, true);
     obstacles = this.physics.add.staticGroup();
     let rawBuildings = sceneData.building_coordinates;
     if (typeof rawBuildings === 'string') { try { rawBuildings = JSON.parse(rawBuildings); } catch(e) {} }
     const buildings = sanitizeBuildings(rawBuildings);
+    const teleportClearance = 140;
+    const obstacleBuildings = buildings.filter(b => !blocksTeleport(b, teleportClearance));
     const palette = [0x6f4a2f, 0x7a5534, 0x6a3f26, 0x7b4f30];
-    buildings.forEach((b, i) => {
+    obstacleBuildings.forEach((b, i) => {
         const building = this.add.rectangle(b.x, b.y, b.w, b.h, palette[i % palette.length]).setOrigin(0, 0);
         building.setVisible(false);
         this.physics.add.existing(building, true);
@@ -472,40 +521,94 @@ function initScene(index) {
     });
     this.physics.add.collider(player, obstacles);
 
+    // Ensure player isn't spawned inside a building
+    if (player && isInsideBuilding(player.x, player.y, obstacleBuildings, 10)) {
+        const safe = findSafeSpawn(obstacleBuildings, npcs);
+        player.setPosition(safe.x, safe.y);
+    }
+
     // NPCs
     npcs.forEach(n => n.destroy());
     npcs = [];
     if (sceneData.npc) {
         sceneData.npc.forEach((npc, nIdx) => {
+            if (npc.defeated) return; // Skip defeated NPCs
+
             const npcKey = `npc_${index}_${nIdx}`;
             const avatarKey = `npc_${index}_${nIdx}_avatar`;
             const tex = this.textures.exists(npcKey) ? npcKey : 'player_down_sheet'; 
             
-            // Random Spawn
-            let sx, sy, ok=false, tries=0;
-            while(!ok && tries<100) {
-                sx = Phaser.Math.Between(100, worldSize.width-100);
-                sy = Phaser.Math.Between(100, worldSize.height-100);
-                ok = true;
-                for(let b of buildings) if(sx>=b.x && sx<=b.x+b.w && sy>=b.y && sy<=b.y+b.h) ok=false;
-                if(ok) for(let n of npcs) if(Phaser.Math.Distance.Between(sx,sy,n.x,n.y)<200) ok=false;
-                tries++;
+            // Persisted spawn (avoid obstacles)
+            let npcSpawn = (npc.x !== undefined && npc.y !== undefined) ? { x: npc.x, y: npc.y } : null;
+            if (!npcSpawn || isInsideBuilding(npcSpawn.x, npcSpawn.y, obstacleBuildings, 10)) {
+                npcSpawn = findSafeSpawn(obstacleBuildings, npcs);
+                npc.x = npcSpawn.x;
+                npc.y = npcSpawn.y;
             }
             
-            const npcSprite = this.physics.add.sprite(sx, sy, tex);
-            npcSprite.setScale(160 / (npcSprite.height||128));
+            const npcSprite = this.physics.add.sprite(npcSpawn.x, npcSpawn.y, tex);
+            npcSprite.setScale(240 / (npcSprite.height||128));
             npcSprite.setImmovable(true);
             npcSprite.setSize(40,56).setOffset(44,48);
             npcSprite.setData('data', npc);
             npcSprite.setData('avatarKey', this.textures.exists(avatarKey) ? avatarKey : 'player_avatar');
-            npcSprite.setData('stats', { name: npc.name, level: 1, hp: 100, maxHp: 100, attack: 10, defense: 10 });
+            // Use stats from data or fallback
+            npcSprite.setData('stats', { 
+                name: npc.name, 
+                level: 1, 
+                hp: npc.hp || 100, 
+                maxHp: npc.hp || 100, 
+                attack: npc.attack || 10, 
+                defense: npc.defense || 10,
+                isMinion: false
+            });
             
             npcs.push(npcSprite);
             
-            const prompt = this.add.text(sx, sy-80, 'SPACE', {fontSize:'16px', backgroundColor:'#000'}).setOrigin(0.5).setVisible(false);
+            const prompt = this.add.text(npcSpawn.x, npcSpawn.y-80, 'SPACE', {fontSize:'16px', backgroundColor:'#000'}).setOrigin(0.5).setVisible(false);
             npcSprite.setData('prompt', prompt);
         });
     }
+
+    // Minions
+    if (sceneData.minions) {
+        sceneData.minions.forEach((minion, mIdx) => {
+            if (minion.defeated) return;
+
+            // Use the shared minion sprite
+            const minionKey = minion.sprite ? minion.sprite.replace('.png','') : 'player_down_sheet';
+            // Ensure texture exists, else fallback
+            const tex = this.textures.exists(minionKey) ? minionKey : 'player_down_sheet';
+
+            let minionSpawn = (minion.x !== undefined && minion.y !== undefined) ? { x: minion.x, y: minion.y } : null;
+            if (!minionSpawn || isInsideBuilding(minionSpawn.x, minionSpawn.y, obstacleBuildings, 10)) {
+                minionSpawn = findSafeSpawn(obstacleBuildings, npcs);
+                minion.x = minionSpawn.x;
+                minion.y = minionSpawn.y;
+            }
+
+            const mSprite = this.physics.add.sprite(minionSpawn.x, minionSpawn.y, tex);
+            mSprite.setScale(160 / (mSprite.height||128));
+            mSprite.setImmovable(true);
+            mSprite.setSize(40,56).setOffset(44,48);
+            
+            // Minion Data
+            mSprite.setData('data', minion);
+            mSprite.setData('stats', { 
+                name: minion.name, 
+                hp: minion.hp || 50, 
+                maxHp: minion.hp || 50, 
+                attack: minion.attack || 5, 
+                defense: minion.defense || 0,
+                isMinion: true
+            });
+
+            npcs.push(mSprite);
+            const prompt = this.add.text(minionSpawn.x, minionSpawn.y-80, 'SPACE', {fontSize:'16px', backgroundColor:'#900'}).setOrigin(0.5).setVisible(false);
+            mSprite.setData('prompt', prompt);
+        });
+    }
+
     this.physics.add.collider(player, npcs);
 
     // Arrows
@@ -522,6 +625,93 @@ function initScene(index) {
 function sanitizeBuildings(buildings) {
     if (!Array.isArray(buildings)) return defaultBuildings;
     return buildings.map(b => ({x:Number(b.x), y:Number(b.y), w:Number(b.w), h:Number(b.h)})).filter(b => b.w>0 && b.h>0);
+}
+
+function setupAudio() {
+    if (this.cache && this.cache.audio && this.cache.audio.exists('walk_sfx')) {
+        this.walkSfx = this.sound.add('walk_sfx', { loop: true, volume: 0.25 });
+    }
+    if (this.cache && this.cache.audio && this.cache.audio.exists('hit_sfx')) {
+        this.hitSfx = this.sound.add('hit_sfx', { loop: false, volume: 0.6 });
+    }
+    if (this.cache && this.cache.audio && this.cache.audio.exists('level_sfx')) {
+        this.levelSfx = this.sound.add('level_sfx', { loop: false, volume: 0.7 });
+    }
+    if (this.cache && this.cache.audio) {
+        const bgmKey = this.cache.audio.exists('bgm') ? 'bgm' : (this.cache.audio.exists('bgm_default') ? 'bgm_default' : null);
+        if (bgmKey) {
+            this.bgm = this.sound.add(bgmKey, { loop: true, volume: 0.2 });
+            this.bgm.play();
+        }
+    }
+}
+
+function playHitSfx(scene) {
+    if (scene && scene.hitSfx) scene.hitSfx.play();
+}
+
+function playLevelUpSfx(scene) {
+    if (scene && scene.levelSfx) scene.levelSfx.play();
+}
+
+function showLevelUp(scene) {
+    if (!scene || !player) return;
+    const text = scene.add.text(player.x, player.y - 100, 'Level Up!', {
+        fontSize: '24px',
+        fontFamily: 'Arial',
+        fill: '#ffff00',
+        stroke: '#000000',
+        strokeThickness: 4
+    }).setOrigin(0.5).setDepth(5000);
+
+    scene.tweens.add({
+        targets: text,
+        y: player.y - 150,
+        alpha: 0,
+        duration: 1200,
+        ease: 'Power1',
+        onComplete: () => text.destroy()
+    });
+}
+
+function startWalkSfx(scene) {
+    if (scene && scene.walkSfx && !scene.walkSfx.isPlaying) scene.walkSfx.play();
+}
+
+function stopWalkSfx(scene) {
+    if (scene && scene.walkSfx && scene.walkSfx.isPlaying) scene.walkSfx.stop();
+}
+
+function blocksTeleport(b, clearance) {
+    return b.x < clearance || (b.x + b.w) > (worldSize.width - clearance);
+}
+
+function isInsideBuilding(x, y, buildings, padding = 0) {
+    for (let b of buildings) {
+        if (x >= b.x - padding && x <= b.x + b.w + padding && y >= b.y - padding && y <= b.y + b.h + padding) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function findSafeSpawn(buildings, existing, tries = 150) {
+    let sx = 128, sy = 128, ok = false, t = 0;
+    while (!ok && t < tries) {
+        sx = Phaser.Math.Between(100, worldSize.width - 100);
+        sy = Phaser.Math.Between(100, worldSize.height - 100);
+        ok = !isInsideBuilding(sx, sy, buildings, 10);
+        if (ok && existing) {
+            for (let n of existing) {
+                if (Phaser.Math.Distance.Between(sx, sy, n.x, n.y) < 200) {
+                    ok = false;
+                    break;
+                }
+            }
+        }
+        t++;
+    }
+    return { x: sx, y: sy };
 }
 
 function playWalkAnim(scene, dir) {
@@ -569,23 +759,38 @@ function update() {
 
     // Menu
     if (menuContainer && menuContainer.visible) {
+        stopWalkSfx(this);
         if (Phaser.Input.Keyboard.JustDown(keys.esc)) closeInteractionMenu();
         if (Phaser.Input.Keyboard.JustDown(keys.up) || Phaser.Input.Keyboard.JustDown(keys.down)) {
             menuContainer.selection = menuContainer.selection === 0 ? 1 : 0;
             this.updateMenuSelection();
         }
         if (Phaser.Input.Keyboard.JustDown(keys.space) || Phaser.Input.Keyboard.JustDown(keys.enter)) {
-            if (menuContainer.selection === 0) {
-                const n = currentTargetNpc; closeInteractionMenu();
-                if(n) { isPaused=true; startDialogue(this, n.getData('data'), n.getData('avatarKey')); }
+            if (!currentTargetNpc) return;
+            const stats = currentTargetNpc.getData('stats');
+            const defeated = currentTargetNpc.getData('data').defeated;
+            
+            if (defeated) {
+                 // Only Chat allowed
+                 const n = currentTargetNpc; closeInteractionMenu();
+                 if(n) { isPaused=true; startDialogue(this, n.getData('data'), n.getData('avatarKey')); }
+            } else if (stats.isMinion) {
+                 // Only fight allowed
+                 startBattle(this);
             } else {
-                startBattle(this);
+                if (menuContainer.selection === 0) {
+                    const n = currentTargetNpc; closeInteractionMenu();
+                    if(n) { isPaused=true; startDialogue(this, n.getData('data'), n.getData('avatarKey')); }
+                } else {
+                    startBattle(this);
+                }
             }
         }
         return;
     }
 
     if (isPaused) {
+        stopWalkSfx(this);
         player.setVelocity(0);
         player.anims.stop();
         if (currentDialogue && Phaser.Input.Keyboard.JustDown(keys.space)) advanceDialogue(this);
@@ -598,8 +803,8 @@ function update() {
         const dist = Phaser.Math.Distance.Between(player.x, player.y, npc.x, npc.y);
         const p = npc.getData('prompt');
         if (p) {
-            p.setVisible(dist < 100);
-            if (dist < 100) activePrompt = npc;
+            p.setVisible(dist < 140);
+            if (dist < 140) activePrompt = npc;
         }
     });
 
@@ -617,11 +822,12 @@ function update() {
     const len = Math.hypot(vx, vy) || 1;
     player.setVelocity((vx/len)*speed, (vy/len)*speed);
 
-    if (vx>0) { playWalkAnim(this, 'right'); }
-    else if (vx<0) { playWalkAnim(this, 'left'); }
-    else if (vy<0) { playWalkAnim(this, 'up'); }
-    else if (vy>0) { playWalkAnim(this, 'down'); }
+    if (vx>0) { playWalkAnim(this, 'right'); startWalkSfx(this); }
+    else if (vx<0) { playWalkAnim(this, 'left'); startWalkSfx(this); }
+    else if (vy<0) { playWalkAnim(this, 'up'); startWalkSfx(this); }
+    else if (vy>0) { playWalkAnim(this, 'down'); startWalkSfx(this); }
     else { 
+        stopWalkSfx(this);
         player.anims.stop(); 
         playerAnimState.frame = 0;
         player.setFrame(0); // All strips have idle at frame 0
@@ -629,10 +835,49 @@ function update() {
 }
 
 function openInteractionMenu(scene, npc) {
-    isPaused = true;
-    currentTargetNpc = npc;
-    const cam = scene.cameras.main;
-    menuContainer.setPosition(player.x - cam.scrollX + 50, player.y - cam.scrollY - 50).setVisible(true);
+    const stats = npc.getData('stats');
+    
+    // Check if defeated
+    if (npc.getData('data').defeated) {
+        // Option: Show simple "Defeated" message or just Chat if NPC
+        if (stats.isMinion) return; // Minions should be destroyed, but just in case
+        
+        // For NPCs, if defeated, maybe only allow chat or show different text?
+        // User asked "no fight option".
+        isPaused = true;
+        currentTargetNpc = npc;
+        const cam = scene.cameras.main;
+        menuContainer.setPosition(player.x - cam.scrollX + 50, player.y - cam.scrollY - 50).setVisible(true);
+        
+        // Force chat selection, disable fight visually (simple way: change text)
+        menuContainer.selection = 0;
+        
+        // Custom update for this menu instance
+        const menuOption1 = menuContainer.list[1];
+        const menuOption2 = menuContainer.list[2];
+        menuOption1.setText('> Chat');
+        menuOption2.setText(''); // Hide Fight option
+        
+        // We need to override the updateMenuSelection for this specific interaction
+        // Or handle it in the main update loop logic
+        return;
+    }
+
+    if (stats.isMinion) {
+        isPaused = true;
+        currentTargetNpc = npc;
+        const cam = scene.cameras.main;
+        menuContainer.setPosition(player.x - cam.scrollX + 50, player.y - cam.scrollY - 50).setVisible(true);
+        menuContainer.selection = 1; 
+        scene.updateMenuSelection();
+    } else {
+        isPaused = true;
+        currentTargetNpc = npc;
+        const cam = scene.cameras.main;
+        menuContainer.setPosition(player.x - cam.scrollX + 50, player.y - cam.scrollY - 50).setVisible(true);
+        menuContainer.selection = 0;
+        scene.updateMenuSelection();
+    }
 }
 function closeInteractionMenu() { menuContainer.setVisible(false); isPaused = false; currentTargetNpc = null; }
 function startBattle(scene) { 
@@ -663,9 +908,10 @@ function startBattle(scene) {
 function executeBattleTurn(scene, npcStats) {
     if (!battleContainer.visible) return;
     const dmg = Math.max(1, playerStats.attack - Math.floor(npcStats.defense/2));
-    npcStats.hp -= dmg;
+    npcStats.hp = Math.max(0, npcStats.hp - dmg);
     battleLogText.setText(`Hit ${npcStats.name}: ${dmg}`);
     shakeSprite(scene, battleNpcSprite);
+    playHitSfx(scene);
     updateBattleStats(npcStats);
     
     if (npcStats.hp <= 0) { endBattle(scene, true); return; }
@@ -673,9 +919,10 @@ function executeBattleTurn(scene, npcStats) {
     scene.time.delayedCall(500, () => {
         if (!battleContainer.visible) return;
         const pdmg = Math.max(1, npcStats.attack - Math.floor(playerStats.defense/2));
-        playerStats.hp -= pdmg;
+        playerStats.hp = Math.max(0, playerStats.hp - pdmg);
         battleLogText.setText(`Hit Player: ${pdmg}`);
         shakeSprite(scene, battlePlayerSprite);
+        playHitSfx(scene);
         updateBattleStats(npcStats);
         if (playerStats.hp <= 0) endBattle(scene, false);
     });
@@ -685,9 +932,61 @@ function shakeSprite(scene, s) { scene.tweens.add({targets:s, x:s.x+10, duration
 function endBattle(scene, win) {
     scene.time.removeAllEvents();
     battleLogText.setText(win ? "WIN!" : "LOSE...");
-    if(win) { playerStats.experience+=50; if(playerStats.experience>=100) {playerStats.level++; playerStats.experience=0; playerStats.skillPoints+=5;} }
-    else playerStats.hp=1;
-    scene.time.delayedCall(2000, () => { battleContainer.setVisible(false); isPaused=false; });
+    
+    let leveledUp = false;
+    if(win) { 
+        const stats = currentTargetNpc.getData('stats');
+        // XP based on strength (HP + Attack)
+        const xpGain = Math.floor((stats.maxHp + stats.attack) * 0.5);
+        playerStats.experience += xpGain; 
+        
+        if(playerStats.experience >= 100) {
+            playerStats.level++; 
+            playerStats.experience -= 100; 
+            playerStats.skillPoints += 5;
+            leveledUp = true;
+        }
+        
+        // Disable NPC or Destroy Minion
+        if (stats.isMinion) {
+            // Mark as defeated in data so it doesn't respawn if we revisit (though initScene respawns from scratch usually)
+            // Ideally we should update gameData but for now just destroy sprite
+            currentTargetNpc.getData('data').defeated = true;
+            // Remove prompt
+            const p = currentTargetNpc.getData('prompt');
+            if (p) p.destroy();
+            currentTargetNpc.destroy();
+            // Remove from npcs array
+            const idx = npcs.indexOf(currentTargetNpc);
+            if (idx > -1) npcs.splice(idx, 1);
+        } else {
+            // NPC: Mark defeated, maybe change color or disable interaction
+            currentTargetNpc.setTint(0x555555);
+            currentTargetNpc.getData('data').defeated = true;
+            // Remove prompt
+            const p = currentTargetNpc.getData('prompt');
+            if (p) p.destroy();
+        }
+    } else {
+        playerStats.hp = 1;
+        if (currentTargetNpc) {
+            const stats = currentTargetNpc.getData('stats');
+            if (stats && stats.maxHp !== undefined) {
+                stats.hp = stats.maxHp;
+            }
+        }
+    }
+    
+    // Full Heal after fight
+    playerStats.hp = playerStats.maxHp;
+    scene.updateProfile();
+
+    if (leveledUp) {
+        showLevelUp(scene);
+        playLevelUpSfx(scene);
+    }
+
+    scene.time.delayedCall(2000, () => { battleContainer.setVisible(false); isPaused=false; currentTargetNpc = null; });
 }
 function startDialogue(scene, data, avatar) {
     if (!data || !data.dialogue || data.dialogue.length === 0) {

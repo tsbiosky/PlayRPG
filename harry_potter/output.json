@@ -1,0 +1,279 @@
+{
+    "bgm": "A whimsical and mysterious orchestral score, starting with a mundane, staccato bassoon theme representing a boring suburban morning, then swelling into a grand, magical adventure theme with soaring brass and twinkling chimes as the world opens up.",
+    "player": {
+        "name": "Harry Potter",
+        "outfit": "Round glasses taped at the bridge, messy black hair, and oversized, worn-out hand-me-down clothes from his cousin."
+    },
+    "npc_list": [
+        {
+            "name": "Vernon Dursley",
+            "outfit": "A large dressing gown or business suit, with a very bushy mustache and a purple face.",
+            "attack": 25,
+            "defense": 15,
+            "hp": 200
+        },
+        {
+            "name": "Dudley Dursley",
+            "outfit": "School uniform or pajamas that are very tight on his large frame.",
+            "attack": 15,
+            "defense": 20,
+            "hp": 180
+        },
+        {
+            "name": "Rubeus Hagrid",
+            "outfit": "A long, heavy coat made of nothing but pockets, huge boots, and carrying a pink umbrella.",
+            "attack": 50,
+            "defense": 50,
+            "hp": 500
+        }
+    ],
+    "minions": [
+        {
+            "name": "Aggressive Barn Owl",
+            "outfit": "A snowy or brown feathered coat with sharp talons and a beak holding a newspaper.",
+            "attack": 12,
+            "defense": 5,
+            "hp": 40
+        }
+    ],
+    "scenes": [
+        {
+            "opening_remarks": "Harry Potter navigates the stark contrast between his stifling life with the Dursleys and the awakening of his magical heritage.",
+            "npc": [
+                {
+                    "name": "Vernon Dursley",
+                    "dialogue": [
+                        [
+                            "Vernon Dursley",
+                            "Third time this week! If you can't control that owl, it'll have to go!"
+                        ],
+                        [
+                            "Harry Potter",
+                            "She's bored. She's used to flying around outside. If I could just let her out at night -"
+                        ],
+                        [
+                            "Vernon Dursley",
+                            "Do I look stupid? I know what'll happen if that owl's let out."
+                        ],
+                        [
+                            "Harry Potter",
+                            "I meant `please'! I didn't mean -"
+                        ],
+                        [
+                            "Vernon Dursley",
+                            "WHAT HAVE I TOLD YOU ABOUT SAYING THE `M' WORD IN OUR HOUSE?"
+                        ],
+                        [
+                            "Harry Potter",
+                            "But I -"
+                        ],
+                        [
+                            "Vernon Dursley",
+                            "HOW DARE YOU THREATEN DUDLEY!"
+                        ],
+                        [
+                            "Harry Potter",
+                            "I just -"
+                        ],
+                        [
+                            "Vernon Dursley",
+                            "I WARNED YOU! I WILL NOT TOLERATE MENTION OF YOUR ABNORMALITY UNDER THIS ROOF!"
+                        ],
+                        [
+                            "Harry Potter",
+                            "All right, all right. . ."
+                        ]
+                    ]
+                },
+                {
+                    "name": "Dudley Dursley",
+                    "dialogue": [
+                        [
+                            "Dudley Dursley",
+                            "Pass the frying pan."
+                        ],
+                        [
+                            "Harry Potter",
+                            "You've forgotten the magic word,"
+                        ]
+                    ]
+                }
+            ],
+            "location": "The kitchen of Number Four, Privet Drive, a spotless and aggressively normal room with square furniture, modern appliances, and a suffocating lack of imagination."
+        },
+        {
+            "npc": [
+                {
+                    "name": "Rubeus Hagrid",
+                    "dialogue": [
+                        [
+                            "Harry Potter",
+                            "Hagrid! There’s an owl —"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Pay him,"
+                        ],
+                        [
+                            "Harry Potter",
+                            "What?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "He wants payin’ fer deliverin’ the paper. Look in the pockets."
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Give him five Knuts,"
+                        ],
+                        [
+                            "Harry Potter",
+                            "Knuts?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "The little bronze ones."
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Best be off, Harry, lots ter do today, gotta get up ter London an’ buy all yer stuff fer school."
+                        ],
+                        [
+                            "Harry Potter",
+                            "Um — Hagrid?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Mm?"
+                        ],
+                        [
+                            "Harry Potter",
+                            "I haven’t got any money — and you heard Uncle Vernon last night…he won’t pay for me to go and learn magic."
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Don’t worry about that. D’yeh think yer parents didn’t leave yeh anything?"
+                        ],
+                        [
+                            "Harry Potter",
+                            "But if their house was destroyed —"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "They didn’ keep their gold in the house, boy! Nah, first stop fer us is Gringotts. Wizards’ bank. Have a sausage, they’re not bad cold — an’ I wouldn’ say no teh a bit o’ yer birthday cake, neither."
+                        ],
+                        [
+                            "Harry Potter",
+                            "Wizards have banks?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Just the one. Gringotts. Run by goblins."
+                        ],
+                        [
+                            "Harry Potter",
+                            "Goblins?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Yeah — so yeh’d be mad ter try an’ rob it, I’ll tell yeh that. Never mess with goblins, Harry. Gringotts is the safest place in the world fer anything yeh want ter keep safe — ‘cept maybe Hogwarts. As a matter o’ fact, I gotta visit Gringotts anyway. Fer Dumbledore. Hogwarts business. He usually gets me ter do important stuff fer him. Fetchin’ you — gettin’ things from Gringotts — knows he can trust me, see."
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Got everythin’? Come on, then."
+                        ],
+                        [
+                            "Harry Potter",
+                            "How did you get here?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Flew,"
+                        ],
+                        [
+                            "Harry Potter",
+                            "Flew?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Yeah — but we’ll go back in this. Not s’pposed ter use magic now I’ve got yeh."
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Seems a shame ter row, though. If I was ter — er — speed things up a bit, would yeh mind not mentionin’ it at Hogwarts?"
+                        ],
+                        [
+                            "Harry Potter",
+                            "Of course not,"
+                        ],
+                        [
+                            "Harry Potter",
+                            "Why would you be mad to try and rob Gringotts?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Spells — enchantments. They say there’s dragons guardin’ the high security vaults. And then yeh gotta find yer way — Gringotts is hundreds of miles under London, see. Deep under the Underground. Yeh’d die of hunger tryin’ ter get out, even if yeh did manage ter get yer hands on summat."
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Ministry o’ Magic messin’ things up as usual,"
+                        ],
+                        [
+                            "Harry Potter",
+                            "There’s a Ministry of Magic?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "’Course. They wanted Dumbledore fer Minister, o’ course, but he’d never leave Hogwarts, so old Cornelius Fudge got the job. Bungler if ever there was one. So he pelts Dumbledore with owls every morning, askin’ fer advice."
+                        ],
+                        [
+                            "Harry Potter",
+                            "But what does a Ministry of Magic do?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Well, their main job is to keep it from the Muggles that there’s still witches an’ wizards up an’ down the country."
+                        ],
+                        [
+                            "Harry Potter",
+                            "Why?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Why? Blimey, Harry, everyone’d be wantin’ magic solutions to their problems. Nah, we’re best left alone."
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "See that, Harry? Things these Muggles dream up, eh?"
+                        ],
+                        [
+                            "Harry Potter",
+                            "Hagrid, did you say there are dragons at Gringotts?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Well, so they say. Crikey, I’d like a dragon."
+                        ],
+                        [
+                            "Harry Potter",
+                            "You’d like one?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Wanted one ever since I was a kid — here we go."
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Still got yer letter, Harry?"
+                        ],
+                        [
+                            "Rubeus Hagrid",
+                            "Good. There’s a list there of everything yeh need."
+                        ]
+                    ]
+                }
+            ],
+            "location": "A journey starting in a damp, sunlit wooden hut on a rock at sea, transitioning to a small boat on glistening water, and ending at a busy train station filled with curious onlookers."
+        }
+    ]
+}

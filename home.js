@@ -63,33 +63,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ story, name })
             });
 
-            const result = await response.json();
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let finalResult = null;
 
-            if (result.success) {
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                
+                const chunk = decoder.decode(value, { stream: true });
+                const lines = chunk.split('\n');
+                
+                for (const line of lines) {
+                    if (line.includes('__JSON_RESULT__')) {
+                        try {
+                            const jsonStr = line.split('__JSON_RESULT__')[1];
+                            finalResult = JSON.parse(jsonStr);
+                        } catch (e) { console.error("Error parsing result", e); }
+                    } else {
+                        logOutput.textContent += line + "\n";
+                        logOutput.scrollTop = logOutput.scrollHeight;
+                    }
+                }
+            }
+
+            if (finalResult && finalResult.success) {
                 logOutput.textContent += "Generation Successful!\n";
                 logOutput.textContent += "--------------------------------\n";
-                // logOutput.textContent += result.stdout; // Stdout might be too long
-                logOutput.textContent += "Game generated at " + result.game_path + "\n";
+                logOutput.textContent += "Game generated at " + finalResult.game_path + "\n";
                 
-                // Refresh list
                 await fetchGames();
                 
-                // Show close button
                 closeOverlayBtn.style.display = 'block';
 
-                // Optional: Open game?
                 if (confirm("Game generated successfully! Open it now?")) {
-                    window.open(result.game_path, '_blank');
+                    window.open(finalResult.game_path, '_blank');
                     loadingOverlay.style.display = 'none';
                     generateBtn.disabled = false;
                 }
             } else {
-                logOutput.textContent += "Generation Failed!\n";
-                logOutput.textContent += "Error: " + (result.error || "Unknown error") + "\n";
-                logOutput.textContent += "--------------------------------\n";
-                logOutput.textContent += result.stderr || "";
-                logOutput.textContent += result.stdout || "";
-                
+                logOutput.textContent += "Generation Finished (Check logs for errors).\n";
                 closeOverlayBtn.style.display = 'block';
             }
 

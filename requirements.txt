@@ -1,2 +1,4 @@
 google-genai
 Pillow
+elevenlabs
+python-dotenv
