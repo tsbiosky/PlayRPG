@@ -1,4 +1,5 @@
 from PIL import Image, ImageFilter
+from collections import deque
 
 def remove_background(image_path, output_path=None, white_threshold=235, low_contrast=10):
     """
@@ -11,23 +12,79 @@ def remove_background(image_path, output_path=None, white_threshold=235, low_con
     pixels = img.load()
     w, h = img.size
 
-    # Build a cleaner alpha channel based on near-white detection
+    # Build a cleaner alpha channel based on near-white detection.
+    # Only remove near-white pixels connected to image borders to avoid
+    # deleting white clothing inside the character.
     alpha = Image.new("L", (w, h), 255)
     a_pixels = alpha.load()
+
+    def is_near_white(px):
+        r, g, b, a = px
+        if a == 0:
+            return False
+        mx = max(r, g, b)
+        mn = min(r, g, b)
+        avg = (r + g + b) / 3
+        return (r >= white_threshold and g >= white_threshold and b >= white_threshold) or (
+            avg >= white_threshold and (mx - mn) <= low_contrast
+        )
+
+    # Flood fill from borders to mark background
+    bg = [[False] * w for _ in range(h)]
+    q = deque()
+    for x in range(w):
+        if is_near_white(pixels[x, 0]): q.append((x, 0))
+        if is_near_white(pixels[x, h - 1]): q.append((x, h - 1))
+    for y in range(h):
+        if is_near_white(pixels[0, y]): q.append((0, y))
+        if is_near_white(pixels[w - 1, y]): q.append((w - 1, y))
+
+    while q:
+        x, y = q.popleft()
+        if bg[y][x]:
+            continue
+        if not is_near_white(pixels[x, y]):
+            continue
+        bg[y][x] = True
+        if x > 0: q.append((x - 1, y))
+        if x < w - 1: q.append((x + 1, y))
+        if y > 0: q.append((x, y - 1))
+        if y < h - 1: q.append((x, y + 1))
 
     for y in range(h):
         for x in range(w):
             r, g, b, a = pixels[x, y]
             if a == 0:
                 a_pixels[x, y] = 0
+            elif bg[y][x]:
+                a_pixels[x, y] = 0
+            else:
+                a_pixels[x, y] = 255
+
+    # Remove near-white halos only at the edge of the subject
+    # (near transparent pixels), preserving white clothing inside.
+    edge_alpha = alpha.load()
+    for y in range(h):
+        for x in range(w):
+            if edge_alpha[x, y] == 0:
                 continue
-            mx = max(r, g, b)
-            mn = min(r, g, b)
-            avg = (r + g + b) / 3
-            is_near_white = (r >= white_threshold and g >= white_threshold and b >= white_threshold) or (
-                avg >= white_threshold and (mx - mn) <= low_contrast
-            )
-            a_pixels[x, y] = 0 if is_near_white else 255
+            if not is_near_white(pixels[x, y]):
+                continue
+            # If any neighbor is transparent, treat this as halo and clear it.
+            has_transparent_neighbor = False
+            for ny in (y - 1, y, y + 1):
+                if ny < 0 or ny >= h:
+                    continue
+                for nx in (x - 1, x, x + 1):
+                    if nx < 0 or nx >= w:
+                        continue
+                    if edge_alpha[nx, ny] == 0:
+                        has_transparent_neighbor = True
+                        break
+                if has_transparent_neighbor:
+                    break
+            if has_transparent_neighbor:
+                edge_alpha[x, y] = 0
 
     # Median filter removes isolated opaque dots around edges
     alpha = alpha.filter(ImageFilter.MedianFilter(size=3))

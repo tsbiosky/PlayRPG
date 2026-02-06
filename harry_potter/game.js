@@ -547,7 +547,8 @@ function initScene(index) {
             }
             
             const npcSprite = this.physics.add.sprite(npcSpawn.x, npcSpawn.y, tex);
-            npcSprite.setScale(240 / (npcSprite.height||128));
+            const targetHeight = (player && player.displayHeight) ? player.displayHeight : 288;
+            npcSprite.setScale(targetHeight / (npcSprite.height||128));
             npcSprite.setImmovable(true);
             npcSprite.setSize(40,56).setOffset(44,48);
             npcSprite.setData('data', npc);
@@ -936,8 +937,8 @@ function endBattle(scene, win) {
     let leveledUp = false;
     if(win) { 
         const stats = currentTargetNpc.getData('stats');
-        // XP based on strength (HP + Attack)
-        const xpGain = Math.floor((stats.maxHp + stats.attack) * 0.5);
+        // XP based on strength (HP + Attack), doubled
+        const xpGain = Math.floor((stats.maxHp + stats.attack) * 1.0);
         playerStats.experience += xpGain; 
         
         if(playerStats.experience >= 100) {

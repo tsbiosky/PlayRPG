@@ -1,0 +1,295 @@
+[
+    {
+        "opening_remarks": "Amidst the sea of flowers, a peaceful memory is interrupted by scorching flames and a vengeful arrival.",
+        "npc": [
+            {
+                "name": "Flower Sect Disciple",
+                "dialogue": [
+                    [
+                        "Flower Sect Disciple",
+                        "Sect Leader, there is a madman outside the sect who has injured many disciples."
+                    ],
+                    [
+                        "Yun Yun",
+                        "I will go and take a look right now."
+                    ]
+                ],
+                "hp": 50,
+                "attack": 15,
+                "defense": 10,
+                "sprite": "npc_FlowerSectDisciple.png",
+                "avatar": "npc_FlowerSectDisciple_avatar.png"
+            }
+        ],
+        "location": "A secluded, quiet cave located on the Northwest Peak of the Flower Sect. The interior is simple, furnished with a stone bed and stone table. The air is filled with the fragrance of flowers and 'Hundred Flower Wine'. Outside the cave is a vast, colorful sea of flowers, creating a fairyland-like atmosphere.",
+        "minions": [
+            {
+                "name": "Flame Spirit 1",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 2",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 3",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 4",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 5",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            }
+        ],
+        "background_image": "background_scene_0.png",
+        "building_coordinates": [
+            {
+                "x": 0,
+                "y": 0,
+                "w": 750,
+                "h": 720
+            },
+            {
+                "x": 1810,
+                "y": 0,
+                "w": 750,
+                "h": 720
+            },
+            {
+                "x": 750,
+                "y": 0,
+                "w": 1060,
+                "h": 220
+            },
+            {
+                "x": 860,
+                "y": 260,
+                "w": 170,
+                "h": 280
+            },
+            {
+                "x": 1080,
+                "y": 260,
+                "w": 160,
+                "h": 160
+            }
+        ],
+        "player": {
+            "name": "Yun Yun",
+            "outfit": "She wears a pure white dress and skirt, exuding an aura of elegance and calmness. Her long, black hair cascades down like a waterfall, reaching her slender waist."
+        }
+    },
+    {
+        "npc": [
+            {
+                "name": "Chi Yan Xie Jun",
+                "dialogue": [
+                    [
+                        "Chi Yan Xie Jun",
+                        "I am Chi Yan Xie Jun. Your lover injured my big brother, Yao Hua Xie Jun. Today, I am here to take revenge for my brother."
+                    ],
+                    [
+                        "Yun Yun",
+                        "So the older one was beaten, and now the younger one comes?"
+                    ],
+                    [
+                        "Chi Yan Xie Jun",
+                        "Sharp-tongued. I will deal with you first, then meet your lover properly."
+                    ],
+                    [
+                        "Chi Yan Xie Jun",
+                        "I heard your lover possesses Heavenly Flames. I am very tempted. After I capture you, I will make him exchange the Heavenly Flames for you."
+                    ],
+                    [
+                        "Yun Yun",
+                        "This is a matter of my Flower Sect. What does it have to do with Xiao Yan?"
+                    ],
+                    [
+                        "Chi Yan Xie Jun",
+                        "Look at my Burning Heaven Flame, isn't it beautiful?!"
+                    ],
+                    [
+                        "Yun Yun",
+                        "Insignificant trick. Compared to Xiao Yan, you are far behind."
+                    ],
+                    [
+                        "Chi Yan Xie Jun",
+                        "I really want to kill you now, but I'll keep you alive to exchange for the Heavenly Flames. Wait until I capture you, I will handle you well and let you know how magical my Burning Heaven Flame is!"
+                    ],
+                    [
+                        "Chi Yan Xie Jun",
+                        "Good! Woman, next I will let you taste the flavor of the Burning Heaven Flame."
+                    ],
+                    [
+                        "Chi Yan Xie Jun",
+                        "My Burning Heaven Flame might not be on the Heavenly Flame Ranking, but it is much more magical than those on the ranking. How is it? The taste of this Burning Heaven Flame is good, right?!"
+                    ]
+                ],
+                "hp": 2500,
+                "attack": 150,
+                "defense": 80,
+                "sprite": "npc_ChiYanXieJun.png",
+                "avatar": "npc_ChiYanXieJun_avatar.png"
+            },
+            {
+                "name": "Xiao Yan",
+                "dialogue": [
+                    [
+                        "Yun Yun",
+                        "Young Master of the Pavilion, why did you come so in time?"
+                    ],
+                    [
+                        "Yun Yun",
+                        "It seems that my Flower Sect has almost been penetrated like a sieve."
+                    ],
+                    [
+                        "Xiao Yan",
+                        "I was worried about you."
+                    ],
+                    [
+                        "Xiao Yan",
+                        "You heal your wounds first, wait for me to deal with him."
+                    ]
+                ],
+                "hp": 3000,
+                "attack": 200,
+                "defense": 100,
+                "sprite": "npc_XiaoYan.png",
+                "avatar": "npc_XiaoYan_avatar.png"
+            }
+        ],
+        "location": "The majestic mountain gate of the Flower Sect in the Central Plains. The geography features rolling hills covered in endless vibrant blooms. The sky is currently distorted by the clash of azure Dou Qi and scorching red flames, creating a stark contrast between the natural beauty of the flowers and the destructive heat of the battle.",
+        "minions": [
+            {
+                "name": "Flame Spirit 1",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 2",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 3",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 4",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 5",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 6",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 7",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 8",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            },
+            {
+                "name": "Flame Spirit 9",
+                "outfit": "A manifestation of living fire shaped like a small, jumping flame or a red fire sword.",
+                "hp": 40,
+                "attack": 12,
+                "defense": 8,
+                "is_minion": true,
+                "sprite": "minion_FlameSpirit.png"
+            }
+        ],
+        "background_image": "background_scene_1.png",
+        "building_coordinates": [
+            {
+                "x": 950,
+                "y": 140,
+                "w": 660,
+                "h": 580
+            },
+            {
+                "x": 0,
+                "y": 360,
+                "w": 460,
+                "h": 360
+            },
+            {
+                "x": 2100,
+                "y": 360,
+                "w": 460,
+                "h": 360
+            }
+        ]
+    }
+]
