@@ -532,8 +532,6 @@ function initScene(index) {
     npcs = [];
     if (sceneData.npc) {
         sceneData.npc.forEach((npc, nIdx) => {
-            if (npc.defeated) return; // Skip defeated NPCs
-
             const npcKey = `npc_${index}_${nIdx}`;
             const avatarKey = `npc_${index}_${nIdx}_avatar`;
             const tex = this.textures.exists(npcKey) ? npcKey : 'player_down_sheet'; 
@@ -552,6 +550,7 @@ function initScene(index) {
             npcSprite.setImmovable(true);
             npcSprite.setSize(40,56).setOffset(44,48);
             npcSprite.setData('data', npc);
+            if (npc.defeated) npcSprite.setTint(0x555555);
             npcSprite.setData('avatarKey', this.textures.exists(avatarKey) ? avatarKey : 'player_avatar');
             // Use stats from data or fallback
             npcSprite.setData('stats', { 
@@ -574,8 +573,6 @@ function initScene(index) {
     // Minions
     if (sceneData.minions) {
         sceneData.minions.forEach((minion, mIdx) => {
-            if (minion.defeated) return;
-
             // Use the shared minion sprite
             const minionKey = minion.sprite ? minion.sprite.replace('.png','') : 'player_down_sheet';
             // Ensure texture exists, else fallback
@@ -941,7 +938,7 @@ function endBattle(scene, win) {
         const xpGain = Math.floor((stats.maxHp + stats.attack) * 1.0);
         playerStats.experience += xpGain; 
         
-        if(playerStats.experience >= 100) {
+        while (playerStats.experience >= 100) {
             playerStats.level++; 
             playerStats.experience -= 100; 
             playerStats.skillPoints += 5;

@@ -8,16 +8,16 @@
         {
             "name": "Chi Yan Xie Jun",
             "outfit": "A burly man with short, fire-red hair that stands upright, with small flames jumping at the tips of each strand. He wears red robes and has a pair of red fire wings spread behind his back.",
-            "attack": 150,
-            "defense": 80,
-            "hp": 2500
+            "hp": 200,
+                "attack": 50,
+                "defense": 20
         },
         {
             "name": "Xiao Yan",
             "outfit": "A young man in black robes, carrying a huge, heavy black ruler on his back. He has a pair of purple-black fire wings on his back.",
-            "attack": 200,
-            "defense": 100,
-            "hp": 3000
+            "hp": 300,
+            "attack": 25,
+            "defense": 30
         },
         {
             "name": "Flower Sect Disciple",

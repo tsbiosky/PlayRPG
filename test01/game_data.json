@@ -153,9 +153,9 @@
                         "My Burning Heaven Flame might not be on the Heavenly Flame Ranking, but it is much more magical than those on the ranking. How is it? The taste of this Burning Heaven Flame is good, right?!"
                     ]
                 ],
-                "hp": 2500,
-                "attack": 150,
-                "defense": 80,
+                "hp": 200,
+                "attack": 50,
+                "defense": 20,
                 "sprite": "npc_ChiYanXieJun.png",
                 "avatar": "npc_ChiYanXieJun_avatar.png"
             },
@@ -179,9 +179,9 @@
                         "You heal your wounds first, wait for me to deal with him."
                     ]
                 ],
-                "hp": 3000,
-                "attack": 200,
-                "defense": 100,
+                "hp": 300,
+                "attack": 25,
+                "defense": 30,
                 "sprite": "npc_XiaoYan.png",
                 "avatar": "npc_XiaoYan_avatar.png"
             }
