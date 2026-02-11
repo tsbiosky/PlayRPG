@@ -30,4 +30,9 @@ and you will see this page
 ![Homepage](image/homepage.png)
 
 upload or enter you story in the chatbox, it will take a few mins to generate the game (depend on story length),then enter the game in the right list.
+WASD to move , P to open status 
 ![Example 1](image/ex1.png)
+
+## Todo List
+- [ ] Item system
+- [ ] NPC Plot presentation
